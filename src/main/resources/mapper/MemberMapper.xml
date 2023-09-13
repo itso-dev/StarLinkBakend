@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.MemberDao">
+    <sql id="list">
+        <if test="search_keyword != null">
+            <if test="search_type == 'name'.toString()">
+            </if>
+            <if test="search_type == null">
+            </if>
+        </if>
+    </sql>
+    <sql id="order">
+        ORDER BY
+        <if test="order_type != null">
+            <choose>
+                <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
+            </choose>
+        </if>
+        MEMBER DESC
+    </sql>
+
+    <select id="getListMember" resultType="com.jamie.home.api.model.common.MEMBER">
+        SELECT *
+        FROM MEMBER
+        WHERE 1=1
+        <include refid="list"></include>
+        <include refid="order"></include>
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListMemberCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE 1=1
+        <include refid="list"></include>
+    </select>
+
+    <select id="getMember" resultType="com.jamie.home.api.model.common.MEMBER">
+        SELECT *
+        FROM MEMBER
+        WHERE MEMBER = #{member}
+    </select>
+
+    <select id="getMemberByCol" resultType="com.jamie.home.api.model.common.MEMBER">
+        SELECT * FROM MEMBER WHERE 1=1
+        <if test="email != null">
+            AND EMAIL = #{email}
+        </if>
+    </select>
+
+    <insert id="insertMember" parameterType="com.jamie.home.api.model.common.MEMBER" useGeneratedKeys="true" keyProperty="member">
+        INSERT INTO MEMBER (
+            COUNTRY, EMAIL, PASSWORD, ROLE, NAME, PHONE, GENDER, ADDRESS, ADDRESS_DETAIL, MARKETING_YN
+        ) VALUES
+            #{country}, #{email}, #{password}, #{role}, #{name}, #{phone}, #{gender}, #{address}, #{address_detail}, #{marketing_yn}
+        )
+    </insert>
+
+    <update id="updateMember">
+        UPDATE MEMBER SET UPD_DATE = now()
+        <if test="password != null">,PASSWORD = #{password}</if>
+        <if test="phone != null">,PHONE = #{phone}</if>
+        <if test="address != null">,ADDRESS = #{address}</if>
+        <if test="address_detail != null">,ADDRESS_DETAIL = #{address_detail}</if>
+        <if test="marketing_yn != null">,MARKETING_YN = #{marketing_yn}</if>
+        WHERE MEMBER = #{member}
+    </update>
+
+    <delete id="deleteMember">
+        DELETE FROM MEMBER WHERE MEMBER = #{member}
+    </delete>
+</mapper>
