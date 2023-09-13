@@ -46,26 +46,34 @@
 
     <select id="getMemberByCol" resultType="com.jamie.home.api.model.common.MEMBER">
         SELECT * FROM MEMBER WHERE 1=1
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
         <if test="email != null">
             AND EMAIL = #{email}
+        </if>
+        <if test="name != null">
+            AND NAME = #{name}
         </if>
     </select>
 
     <insert id="insertMember" parameterType="com.jamie.home.api.model.common.MEMBER" useGeneratedKeys="true" keyProperty="member">
         INSERT INTO MEMBER (
-            COUNTRY, EMAIL, PASSWORD, ROLE, NAME, PHONE, GENDER, ADDRESS, ADDRESS_DETAIL, MARKETING_YN
-        ) VALUES
-            #{country}, #{email}, #{password}, #{role}, #{name}, #{phone}, #{gender}, #{address}, #{address_detail}, #{marketing_yn}
+            ID, COUNTRY, EMAIL, PASSWORD, ROLE, NAME, PHONE, GENDER, ADDRESS, ADDRESS_DETAIL, MARKETING_YN
+        ) VALUES (
+            #{id}, #{country}, #{email}, #{password}, #{role}, #{name}, #{phone}, #{gender}, #{address}, #{address_detail}, #{marketing_yn}
         )
     </insert>
 
     <update id="updateMember">
         UPDATE MEMBER SET UPD_DATE = now()
         <if test="password != null">,PASSWORD = #{password}</if>
+        <if test="email != null">,EMAIL = #{email}</if>
         <if test="phone != null">,PHONE = #{phone}</if>
         <if test="address != null">,ADDRESS = #{address}</if>
         <if test="address_detail != null">,ADDRESS_DETAIL = #{address_detail}</if>
         <if test="marketing_yn != null">,MARKETING_YN = #{marketing_yn}</if>
+        <if test="profile_file != null">,PROFILE_FILE = #{profile_file}</if>
         WHERE MEMBER = #{member}
     </update>
 

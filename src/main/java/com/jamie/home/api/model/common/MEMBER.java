@@ -3,15 +3,20 @@ package com.jamie.home.api.model.common;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
 @ToString
 public class MEMBER {
     private Integer member;
+    private String id;
     private Integer country;
     private String email;
     private String password;
@@ -22,9 +27,13 @@ public class MEMBER {
     private String gender;
     private String address;
     private String address_detail;
-    private String marketing_yn;
+    private Boolean marketing_yn;
+    private String profile_file;
 
     private Boolean auto_login;
+
+    private ArrayList<MultipartFile> profile_file_new;
+    private Map<String, Object> other_info = new HashMap<>();
 
     public MEMBER() {}
 

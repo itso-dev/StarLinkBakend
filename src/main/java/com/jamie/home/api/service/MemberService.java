@@ -3,6 +3,7 @@ package com.jamie.home.api.service;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.ROLE;
 import com.jamie.home.api.model.common.SEARCH;
+import com.jamie.home.util.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class MemberService extends BasicService{
         // 비밀번호 암호화
         member.setPassword(encoder.encode(member.getPassword()));
         member.setRole(ROLE.ROLE_USER);
+        member.setProfile_file("[]");
 
         Integer result = memberDao.insertMember(member);
         return result;
@@ -41,6 +43,17 @@ public class MemberService extends BasicService{
     public Integer modify(MEMBER member) {
         if(member.getPassword() != null){
             member.setPassword(encoder.encode(member.getPassword()));
+        }
+
+        MEMBER ori_member = memberDao.getMember(member);
+        if(member.getProfile_file_new() != null){
+            member.setProfile_file(
+                    FileUtils.modiOneFiles(
+                            ori_member.getProfile_file(),
+                            member.getProfile_file_new(),
+                            uploadDir
+                    )
+            );
         }
         return memberDao.updateMember(member);
     }

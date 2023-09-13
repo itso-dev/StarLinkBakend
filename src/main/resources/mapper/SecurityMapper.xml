@@ -6,6 +6,6 @@
         SELECT
             *
         FROM MEMBER
-        WHERE EMAIL = #{email}
+        WHERE ID = #{id}
     </select>
 </mapper>
