@@ -40,6 +40,8 @@ public class BasicService {
     FaqDao faqDao;
     @Autowired
     NoticeDao noticeDao;
+    @Autowired
+    InterDao interDao;
 
     public List<FIELD> listField(SEARCH search) {
         return fieldDao.getListField(search);

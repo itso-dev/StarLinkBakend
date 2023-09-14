@@ -6,6 +6,8 @@ import lombok.ToString;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.util.List;
+import java.util.Map;
 
 @ToString
 @Getter
@@ -24,6 +26,21 @@ public class SEARCH {
     private String email;
     @Enumerated(EnumType.STRING)
     private ROLE role;
+
+    // 통역사
+    private Integer interpreter;
+    private Integer country;
+    private Integer location;
+    private List<Integer> categoryList;
+    private Integer language;
+    private String start_date;
+    private String end_date;
+    private Integer day_unit;
+    private Integer min_price;
+    private Integer max_price;
+    private Integer car;
+    private Integer pickup;
+    private Integer gender;
 
     // auth
     private String returnurl;

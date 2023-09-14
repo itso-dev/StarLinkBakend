@@ -24,7 +24,7 @@ public class MEMBER {
     private ROLE role;
     private String name;
     private String phone;
-    private String gender;
+    private Integer gender;
     private String address;
     private String address_detail;
     private Boolean marketing_yn;

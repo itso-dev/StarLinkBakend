@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.InterDao">
+    <sql id="list">
+        <if test="search_keyword != null">
+            <if test="search_type == ''.toString()">
+            </if>
+            <if test="search_type == null">
+            </if>
+        </if>
+        <if test="country != null">
+            AND COUNTRY = #{country}
+        </if>
+        <if test="location != null">
+            AND INTERPRETER IN (SELECT DISTINCT INTERPRETER FROM INTERPRETER_LOCATION WHERE FIELD = #{location})
+        </if>
+        <if test="categoryList != null">
+            AND INTERPRETER IN (
+                SELECT DISTINCT INTERPRETER
+                FROM INTERPRETER_CATEGORY
+                WHERE FIELD IN
+                <foreach collection="categoryList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            )
+        </if>
+        <if test="language != null">
+            AND INTERPRETER IN (SELECT DISTINCT INTERPRETER FROM INTERPRETER_LANGUAGE WHERE FIELD = #{language})
+        </if>
+        <if test="start_date != null and end_date != null">
+
+        </if>
+        <if test="day_unit != null">
+            AND DAY_UNIT = #{day_unit}
+            AND DAY_PRICE BETWEEN #{min_price} AND #{max_price}
+        </if>
+        <if test="car != null">
+            AND CAR = #{car}
+        </if>
+        <if test="pickup != null">
+            AND PICKUP = #{pickup}
+        </if>
+        <if test="gender != null">
+            AND #{gender} = (SELECT GENDER FROM MEMBER WHERE MEMBER = INTERPRETER.MEMBER)
+        </if>
+    </sql>
+    <sql id="order">
+        ORDER BY
+        <if test="order_type != null">
+            <choose>
+                <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
+            </choose>
+        </if>
+        INTERPRETER DESC
+    </sql>
+
+    <select id="getListInterpreter" resultType="com.jamie.home.api.model.INTERPRETER">
+        SELECT *
+        FROM INTERPRETER
+        WHERE 1=1
+        <include refid="list"></include>
+        <include refid="order"></include>
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListInterpreterCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM INTERPRETER
+        WHERE 1=1
+        <include refid="list"></include>
+    </select>
+
+    <select id="getInterpreter" resultType="com.jamie.home.api.model.INTERPRETER">
+        SELECT *
+        FROM INTERPRETER
+        WHERE INTERPRETER = #{interpreter}
+    </select>
+
+    <insert id="insertInterpreter" parameterType="com.jamie.home.api.model.INTERPRETER" useGeneratedKeys="true" keyProperty="interpreter">
+        INSERT INTO INTERPRETER (
+            MEMBER, COUNTRY, DAY_UNIT, DAY_PRICE, CAR, PICKUP, PICKUP_UNIT, PICKUP_PRICE,
+            INFO, PROFILE, CAREER, EXTRA, FILES, STATE
+        ) VALUE (
+            #{member}, #{country}, #{day_unit}, #{day_price}, #{car}, #{pickup}, #{pickup_unit}, #{pickup_price},
+            #{info}, #{profile}, #{career}, #{extra}, #{files}, #{state}
+        )
+    </insert>
+
+    <update id="updateInterpreter">
+        UPDATE INTERPRETER SET UPD_DATE = now()
+        <if test="country != null">,COUNTRY = #{country}</if>
+        <if test="day_unit != null">,DAY_UNIT = #{day_unit}</if>
+        <if test="day_price != null">,DAY_PRICE = #{day_price}</if>
+        <if test="car != null">,CAR = #{car}</if>
+        <if test="pickup != null">,PICKUP = #{pickup}</if>
+        <if test="pickup_unit != null">,PICKUP_UNIT = #{pickup_unit}</if>
+        <if test="pickup_price != null">,PICKUP_PRICE = #{pickup_price}</if>
+        <if test="info != null">,INFO = #{info}</if>
+        <if test="profile != null">,PROFILE = #{profile}</if>
+        <if test="career != null">,CAREER = #{career}</if>
+        <if test="extra != null">,EXTRA = #{extra}</if>
+        <if test="files != null">,FILES = #{files}</if>
+        <if test="state != null">,STATE = #{state}</if>
+        WHERE INTERPRETER = #{interpreter}
+    </update>
+
+    <delete id="deleteInterpreter">
+        DELETE FROM INTERPRETER WHERE INTERPRETER = #{interpreter}
+    </delete>
+
+    <insert id="insertInterpreterLocation">
+        INSERT INTO INTERPRETER_LOCATION (INTERPRETER, FIELD) VALUES
+        <foreach collection="keyList" item="item" open="" separator="," close="">
+            (#{interpreter}, #{item})
+        </foreach>
+    </insert>
+
+    <select id="getListInterpreterLocation" resultType="java.lang.Integer">
+        SELECT FIELD FROM INTERPRETER_LOCATION WHERE INTERPRETER = #{interpreter}
+    </select>
+
+    <delete id="deleteInterpreterLocation">
+        DELETE FROM INTERPRETER_LOCATION WHERE INTERPRETER = #{interpreter} AND FIELD IN
+        <foreach collection="keyList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insertInterpreterCategory">
+        INSERT INTO INTERPRETER_CATEGORY (INTERPRETER, FIELD) VALUES
+        <foreach collection="keyList" item="item" open="" separator="," close="">
+            (#{interpreter}, #{item})
+        </foreach>
+    </insert>
+
+    <select id="getListInterpreterCategory" resultType="java.lang.Integer">
+        SELECT FIELD FROM INTERPRETER_CATEGORY WHERE INTERPRETER = #{interpreter}
+    </select>
+
+    <delete id="deleteInterpreterCategory">
+        DELETE FROM INTERPRETER_CATEGORY WHERE INTERPRETER = #{interpreter} AND FIELD IN
+        <foreach collection="keyList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insertInterpreterLanguage">
+        INSERT INTO INTERPRETER_LANGUAGE (INTERPRETER, FIELD) VALUES
+        <foreach collection="keyList" item="item" open="" separator="," close="">
+            (#{interpreter}, #{item})
+        </foreach>
+    </insert>
+
+    <select id="getListInterpreterLanguage" resultType="java.lang.Integer">
+        SELECT FIELD FROM INTERPRETER_LANGUAGE WHERE INTERPRETER = #{interpreter}
+    </select>
+
+    <delete id="deleteInterpreterLanguage">
+        DELETE FROM INTERPRETER_LANGUAGE WHERE INTERPRETER = #{interpreter} AND FIELD IN
+        <foreach collection="keyList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>
