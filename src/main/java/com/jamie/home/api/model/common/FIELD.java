@@ -12,7 +12,10 @@ public class FIELD {
     private Integer field_index;
     private Integer sort;
     private String type_name;
-    private String name;
+    private String name1;
+    private String name2;
+    private String name3;
+    private String value;
     private String reg_date;
     private String upd_date;
 
