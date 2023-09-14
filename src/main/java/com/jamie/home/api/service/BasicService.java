@@ -1,7 +1,6 @@
 package com.jamie.home.api.service;
 
-import com.jamie.home.api.dao.FieldDao;
-import com.jamie.home.api.dao.MemberDao;
+import com.jamie.home.api.dao.*;
 import com.jamie.home.api.model.common.FIELD;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.SEARCH;
@@ -33,7 +32,14 @@ public class BasicService {
     MemberDao memberDao;
     @Autowired
     FieldDao fieldDao;
-
+    @Autowired
+    BannerDao bannerDao;
+    @Autowired
+    ContactDao contactDao;
+    @Autowired
+    FaqDao faqDao;
+    @Autowired
+    NoticeDao noticeDao;
 
     public List<FIELD> listField(SEARCH search) {
         return fieldDao.getListField(search);
