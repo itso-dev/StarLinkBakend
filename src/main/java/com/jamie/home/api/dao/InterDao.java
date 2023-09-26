@@ -17,13 +17,7 @@ public interface InterDao {
     Integer insertInterpreter(INTERPRETER interpreter);
     Integer updateInterpreter(INTERPRETER interpreter);
     Integer deleteInterpreter(INTERPRETER interpreter);
-    void insertInterpreterLocation(Map<String, Object> param);
-    List<Integer> getListInterpreterLocation(Integer interpreter);
-    void deleteInterpreterLocation(Map<String, Object> param);
-    void insertInterpreterCategory(Map<String, Object> param);
-    List<Integer> getListInterpreterCategory(Integer interpreter);
-    void deleteInterpreterCategory(Map<String, Object> param);
-    void insertInterpreterLanguage(Map<String, Object> param);
-    List<Integer> getListInterpreterLanguage(Integer interpreter);
-    void deleteInterpreterLanguage(Map<String, Object> param);
+    void insertInterpreterMultiChoice(Map<String, Object> param);
+    List<Integer> getListInterpreterMultiChoice(Integer interpreter, String type_value);
+    void deleteInterpreterMultiChoice(Map<String, Object> param);
 }

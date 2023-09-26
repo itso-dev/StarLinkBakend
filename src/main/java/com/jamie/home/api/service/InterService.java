@@ -37,9 +37,9 @@ public class InterService extends BasicService{
 
     private void setDetailInfo(INTERPRETER interpreter){
         interpreter.getOther_info().put("member_info",memberDao.getMember(new MEMBER(interpreter.getMember())));
-        interpreter.getOther_info().put("location",interDao.getListInterpreterLocation(interpreter.getInterpreter()));
-        interpreter.getOther_info().put("category",interDao.getListInterpreterCategory(interpreter.getInterpreter()));
-        interpreter.getOther_info().put("language",interDao.getListInterpreterLanguage(interpreter.getInterpreter()));
+        interpreter.getOther_info().put("location",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"location"));
+        interpreter.getOther_info().put("category",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"category"));
+        interpreter.getOther_info().put("language",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"language"));
     }
 
     public Integer listCnt(SEARCH search) {
@@ -94,13 +94,8 @@ public class InterService extends BasicService{
         Map<String, Object> param = new HashMap<>();
         param.put("interpreter", interpreter);
         param.put("keyList", keyList);
-        if("location".equals(type)){
-            interDao.insertInterpreterLocation(param);
-        } else if("category".equals(type)){
-            interDao.insertInterpreterCategory(param);
-        } else if("language".equals(type)){
-            interDao.insertInterpreterLanguage(param);
-        }
+        param.put("type_value", type);
+        interDao.insertInterpreterMultiChoice(param);
     }
 
     public Integer modify(INTERPRETER interpreter) {
@@ -119,7 +114,7 @@ public class InterService extends BasicService{
             try {
                 // 들어온 값
                 List<Integer> keyList = Arrays.asList(mapper.readValue(interpreter.getLocation(), Integer[].class));
-                List<Integer> ori_keyList = interDao.getListInterpreterLocation(interpreter.getInterpreter());
+                List<Integer> ori_keyList = interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(), "location");
                 modifyMultiChoiceField(interpreter.getInterpreter(), keyList, ori_keyList, "location");
             } catch (Exception e){
                 logger.error(e.getMessage());
@@ -128,7 +123,7 @@ public class InterService extends BasicService{
         if(interpreter.getCategory() != null){ // 통역분야
             try {
                 List<Integer> keyList = Arrays.asList(mapper.readValue(interpreter.getCategory(), Integer[].class));
-                List<Integer> ori_keyList = interDao.getListInterpreterCategory(interpreter.getInterpreter());
+                List<Integer> ori_keyList = interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(), "category");
                 modifyMultiChoiceField(interpreter.getInterpreter(), keyList, ori_keyList, "category");
             } catch (Exception e){
                 logger.error(e.getMessage());
@@ -137,7 +132,7 @@ public class InterService extends BasicService{
         if(interpreter.getLanguage() != null){ // 통역가능언어
             try {
                 List<Integer> keyList = Arrays.asList(mapper.readValue(interpreter.getLanguage(), Integer[].class));
-                List<Integer> ori_keyList = interDao.getListInterpreterLanguage(interpreter.getInterpreter());
+                List<Integer> ori_keyList = interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(), "language");
                 modifyMultiChoiceField(interpreter.getInterpreter(), keyList, ori_keyList, "language");
             } catch (Exception e){
                 logger.error(e.getMessage());
@@ -156,25 +151,13 @@ public class InterService extends BasicService{
 
         if(insertKeyList.size() != 0){
             param.put("keyList", insertKeyList);
-
-            if("location".equals(type)){
-                interDao.insertInterpreterLocation(param);
-            } else if("category".equals(type)){
-                interDao.insertInterpreterCategory(param);
-            } else if("language".equals(type)){
-                interDao.insertInterpreterLanguage(param);
-            }
+            param.put("type_value", type);
+            interDao.insertInterpreterMultiChoice(param);
         }
         if(deleteKeyList.size() != 0){
             param.put("keyList", deleteKeyList);
-
-            if("location".equals(type)){
-                interDao.deleteInterpreterLocation(param);
-            } else if("category".equals(type)){
-                interDao.deleteInterpreterCategory(param);
-            } else if("language".equals(type)){
-                interDao.deleteInterpreterLanguage(param);
-            }
+            param.put("type_value", type);
+            interDao.deleteInterpreterMultiChoice(param);
         }
     }
 

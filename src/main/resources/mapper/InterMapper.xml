@@ -111,55 +111,19 @@
         DELETE FROM INTERPRETER WHERE INTERPRETER = #{interpreter}
     </delete>
 
-    <insert id="insertInterpreterLocation">
-        INSERT INTO INTERPRETER_LOCATION (INTERPRETER, FIELD) VALUES
+    <insert id="insertInterpreterMultiChoice">
+        INSERT INTO INTERPRETER_MULTI_CHOICE (INTERPRETER, FIELD, TYPE_VALUE) VALUES
         <foreach collection="keyList" item="item" open="" separator="," close="">
-            (#{interpreter}, #{item})
+            (#{interpreter}, #{item}, #{type_value})
         </foreach>
     </insert>
 
-    <select id="getListInterpreterLocation" resultType="java.lang.Integer">
-        SELECT FIELD FROM INTERPRETER_LOCATION WHERE INTERPRETER = #{interpreter}
+    <select id="getListInterpreterMultiChoice" resultType="java.lang.Integer">
+        SELECT FIELD FROM INTERPRETER_MULTI_CHOICE WHERE INTERPRETER = #{interpreter} AND TYPE_VALUE = #{type_value}
     </select>
 
-    <delete id="deleteInterpreterLocation">
-        DELETE FROM INTERPRETER_LOCATION WHERE INTERPRETER = #{interpreter} AND FIELD IN
-        <foreach collection="keyList" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </delete>
-
-    <insert id="insertInterpreterCategory">
-        INSERT INTO INTERPRETER_CATEGORY (INTERPRETER, FIELD) VALUES
-        <foreach collection="keyList" item="item" open="" separator="," close="">
-            (#{interpreter}, #{item})
-        </foreach>
-    </insert>
-
-    <select id="getListInterpreterCategory" resultType="java.lang.Integer">
-        SELECT FIELD FROM INTERPRETER_CATEGORY WHERE INTERPRETER = #{interpreter}
-    </select>
-
-    <delete id="deleteInterpreterCategory">
-        DELETE FROM INTERPRETER_CATEGORY WHERE INTERPRETER = #{interpreter} AND FIELD IN
-        <foreach collection="keyList" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </delete>
-
-    <insert id="insertInterpreterLanguage">
-        INSERT INTO INTERPRETER_LANGUAGE (INTERPRETER, FIELD) VALUES
-        <foreach collection="keyList" item="item" open="" separator="," close="">
-            (#{interpreter}, #{item})
-        </foreach>
-    </insert>
-
-    <select id="getListInterpreterLanguage" resultType="java.lang.Integer">
-        SELECT FIELD FROM INTERPRETER_LANGUAGE WHERE INTERPRETER = #{interpreter}
-    </select>
-
-    <delete id="deleteInterpreterLanguage">
-        DELETE FROM INTERPRETER_LANGUAGE WHERE INTERPRETER = #{interpreter} AND FIELD IN
+    <delete id="deleteInterpreterMultiChoice">
+        DELETE FROM INTERPRETER_MULTI_CHOICE WHERE INTERPRETER = #{interpreter} AND TYPE_VALUE = #{type_value} AND FIELD IN
         <foreach collection="keyList" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
