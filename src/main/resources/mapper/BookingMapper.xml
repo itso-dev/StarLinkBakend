@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.BookingDao">
+    <sql id="list">
+        <if test="search_keyword != null">
+            <if test="search_type == ''.toString()">
+            </if>
+        </if>
+        <if test="interpreter != null and member != null">
+            AND (INTERPRETER = #{interpreter} OR MEMBER = #{member})
+        </if>
+        <if test="interpreter == null and member != null">
+            AND MEMBER = #{member}
+        </if>
+    </sql>
+    <sql id="order">
+        ORDER BY
+        <if test="order_type != null">
+            <choose>
+                <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
+            </choose>
+        </if>
+        BOOKING DESC
+    </sql>
+
+    <select id="getListBooking" resultType="com.jamie.home.api.model.BOOKING">
+        SELECT *
+        FROM BOOKING
+        WHERE 1=1
+        <include refid="list"></include>
+        <include refid="order"></include>
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListBookingCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM BOOKING
+        WHERE 1=1
+        <include refid="list"></include>
+    </select>
+
+    <select id="getBooking" resultType="com.jamie.home.api.model.BOOKING">
+        SELECT *
+        FROM BOOKING
+        WHERE BOOKING = #{booking}
+    </select>
+
+    <insert id="insertBooking" parameterType="com.jamie.home.api.model.BOOKING" useGeneratedKeys="true" keyProperty="booking">
+        INSERT INTO BOOKING (
+            INTERPRETER, MEMBER, START, END, PURPOSE, CATEGORY, PEOPLE, PEOPLE_CNT, PHONE_TYPE, PHONE_NUMBER,
+            PICKUP_YN, PICKUP_PRICE, PLANE_NAME, PLANE_START, PLANE_END, INSURANCE_YN, REQUEST_MSG, STATE
+        ) VALUES (
+            #{interpreter}, #{member}, #{start}, #{end}, #{purpose}, #{category}, #{people}, #{people_cnt}, #{phone_type}, #{phone_number}
+            , #{pickup_yn}, #{pickup_price}, #{plane_name}, #{plane_start}, #{plane_end}, #{insurance_yn}, #{request_msg}, #{state}
+        )
+    </insert>
+
+    <update id="updateBooking">
+        UPDATE BOOKING SET UPD_DATE = now()
+        <if test="start != null">,START = #{start}</if>
+        <if test="end != null">,END = #{end}</if>
+        <if test="purpose != null">,PURPOSE = #{purpose}</if>
+        <if test="category != null">,CATEGORY = #{category}</if>
+        <if test="people != null">,PEOPLE = #{people}</if>
+        <if test="people_cnt != null">,PEOPLE_CNT = #{people_cnt}</if>
+        <if test="phone_type != null">,PHONE_TYPE = #{phone_type}</if>
+        <if test="phone_number != null">,PHONE_NUMBER = #{phone_number}</if>
+        <if test="pickup_yn != null">,PICKUP_YN = #{pickup_yn}</if>
+        <if test="pickup_price != null">,PICKUP_PRICE = #{pickup_price}</if>
+        <if test="plane_name != null">,PLANE_NAME = #{plane_name}</if>
+        <if test="plane_start != null">,PLANE_START = #{plane_start}</if>
+        <if test="plane_end != null">,PLANE_END = #{plane_end}</if>
+        <if test="insurance_yn != null">,INSURANCE_YN = #{insurance_yn}</if>
+        <if test="request_msg != null">,REQUEST_MSG = #{request_msg}</if>
+        <if test="state != null">,STATE = #{state}</if>
+        WHERE BOOKING = #{booking}
+    </update>
+
+    <delete id="deleteBooking">
+        DELETE FROM BOOKING WHERE BOOKING = #{booking}
+    </delete>
+</mapper>

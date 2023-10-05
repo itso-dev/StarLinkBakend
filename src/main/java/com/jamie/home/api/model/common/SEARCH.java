@@ -31,7 +31,7 @@ public class SEARCH {
     private Integer interpreter;
     private Integer country;
     private Integer location;
-    private List<Integer> categoryList;
+    private List<Integer> category_list;
     private Integer language;
     private String start_date;
     private String end_date;
@@ -41,14 +41,6 @@ public class SEARCH {
     private Integer car;
     private Integer pickup;
     private Integer gender;
-
-    // auth
-    private String returnurl;
-    private String enc_data;
-    private String auth_iv;
-    private String auth_key;
-    private String foreigner_number;
-    private String foreigner_name;
 
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
