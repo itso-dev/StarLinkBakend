@@ -1,7 +1,6 @@
 package com.jamie.home.api.controller;
 
 import com.jamie.home.api.model.INTERPRETER;
-import com.jamie.home.api.model.NOTICE;
 import com.jamie.home.api.model.common.ResponseOverlays;
 import com.jamie.home.api.model.common.SEARCH;
 import com.jamie.home.api.service.InterService;
