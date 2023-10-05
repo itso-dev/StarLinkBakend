@@ -1,7 +1,9 @@
 package com.jamie.home.api.service;
 
 import com.jamie.home.api.model.BOOKING;
+import com.jamie.home.api.model.REPORT;
 import com.jamie.home.api.model.common.SEARCH;
+import com.jamie.home.util.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,5 +36,36 @@ public class BookingService extends BasicService{
 
     public Integer remove(BOOKING booking) {
         return bookingDao.deleteBooking(booking);
+    }
+
+    public REPORT getReport(REPORT report) {
+        return bookingDao.getBookingReport(report);
+    }
+
+    public Integer saveReport(REPORT report) {
+        report.setFiles(
+                FileUtils.saveFiles(
+                        report.getFiles_new(),
+                        uploadDir
+                )
+        );
+        return bookingDao.insertBookingReport(report);
+    }
+
+    public Integer modifyReport(REPORT report) {
+        REPORT ori_report = bookingDao.getBookingReport(report);
+        try {
+            report.setFiles(
+                    FileUtils.modiFiles(
+                            ori_report.getFiles(),
+                            report.getFiles_del(),
+                            report.getFiles_new(),
+                            uploadDir
+                    )
+            );
+        } catch (Exception e) {
+            report.setFiles(null);
+        }
+        return bookingDao.updateBookingReport(report);
     }
 }

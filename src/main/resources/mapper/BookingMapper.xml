@@ -76,10 +76,29 @@
         <if test="insurance_yn != null">,INSURANCE_YN = #{insurance_yn}</if>
         <if test="request_msg != null">,REQUEST_MSG = #{request_msg}</if>
         <if test="state != null">,STATE = #{state}</if>
+        <if test="cancel_msg != null">,CANCEL_MSG = #{cancel_msg}</if>
+        <if test="grade != null">,GRADE = #{grade}</if>
         WHERE BOOKING = #{booking}
     </update>
 
     <delete id="deleteBooking">
         DELETE FROM BOOKING WHERE BOOKING = #{booking}
     </delete>
+
+    <select id="getBookingReport" resultType="com.jamie.home.api.model.REPORT">
+        SELECT * FROM BOOKING_REPORT WHERE BOOKING_REPORT = #{booking_report}
+    </select>
+
+    <insert id="insertBookingReport">
+        INSERT INTO BOOKING_REPORT (BOOKING, TITLE, CONTENT, FILES) VALUES (#{booking}, #{title}, #{content}, #{files})
+    </insert>
+
+    <update id="updateBookingReport">
+        UPDATE BOOKING_REPORT SET UPD_DATE = now()
+        <if test="title != null">,TITLE = #{title}</if>
+        <if test="content != null">,CONTENT = #{content}</if>
+        <if test="answer != null">,ANSWER = #{answer}</if>
+        <if test="files != null">,FILES = #{files}</if>
+        WHERE BOOKING = #{booking}
+    </update>
 </mapper>

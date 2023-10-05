@@ -32,6 +32,10 @@ public class BOOKING {
     private Boolean insurance_yn;
     private String request_msg;
     private Integer state;
+    private String cancel_msg;
+    private Float grade;
+    private String reg_date;
+    private String upd_date;
 
     private Map<String, Object> other_info = new HashMap<>();
 
