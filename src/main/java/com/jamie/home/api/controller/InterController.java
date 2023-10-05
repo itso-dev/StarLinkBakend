@@ -103,4 +103,20 @@ public class InterController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_FAIL", false);
         }
     }
+
+    @RequestMapping(value="/{key}/like", method= RequestMethod.POST)
+    public ResponseOverlays like(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
+        try {
+            search.setInterpreter(key);
+            int result = interService.like(search);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_INTERPRETER_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_FAIL", false);
+        }
+    }
 }

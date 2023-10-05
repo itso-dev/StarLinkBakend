@@ -164,4 +164,8 @@ public class InterService extends BasicService{
     public Integer remove(INTERPRETER interpreter) {
         return interDao.deleteInterpreter(interpreter);
     }
+
+    public int like(SEARCH search) {
+        return interDao.updateInterpreterLike(search);
+    }
 }

@@ -20,4 +20,5 @@ public interface InterDao {
     void insertInterpreterMultiChoice(Map<String, Object> param);
     List<Integer> getListInterpreterMultiChoice(Integer interpreter, String type_value);
     void deleteInterpreterMultiChoice(Map<String, Object> param);
+    Integer updateInterpreterLike(SEARCH search);
 }

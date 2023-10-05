@@ -15,12 +15,12 @@
         <if test="location != null">
             AND INTERPRETER IN (SELECT DISTINCT INTERPRETER FROM INTERPRETER_LOCATION WHERE FIELD = #{location})
         </if>
-        <if test="categoryList != null">
+        <if test="category_list != null">
             AND INTERPRETER IN (
                 SELECT DISTINCT INTERPRETER
                 FROM INTERPRETER_CATEGORY
                 WHERE FIELD IN
-                <foreach collection="categoryList" item="item" open="(" separator="," close=")">
+                <foreach collection="category_list" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             )
@@ -128,4 +128,8 @@
             #{item}
         </foreach>
     </delete>
+
+    <insert id="updateInterpreterLike">
+        CALL UPDATE_INTERPRETER_LIKE(#{interpreter}, #{member})
+    </insert>
 </mapper>
