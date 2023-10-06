@@ -90,6 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/main/**").permitAll()
                 .antMatchers("/file/download").permitAll()
                 .antMatchers("/interpreter/list").permitAll()
+                .antMatchers("GET","/interpreter/**").permitAll()
                 .antMatchers("/banner/list").permitAll()
                 // ------------------------------------------------------------
 
