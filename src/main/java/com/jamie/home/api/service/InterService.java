@@ -2,7 +2,9 @@ package com.jamie.home.api.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamie.home.api.controller.InterController;
+import com.jamie.home.api.model.INFO;
 import com.jamie.home.api.model.INTERPRETER;
+import com.jamie.home.api.model.common.FIELD;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.SEARCH;
 import com.jamie.home.util.FileUtils;
@@ -95,8 +97,8 @@ public class InterService extends BasicService{
     }
 
     public Integer modify(INTERPRETER interpreter) {
+        INTERPRETER ori_Interpreter = interDao.getInterpreter(interpreter);
         if(interpreter.getFiles_new() != null){
-            INTERPRETER ori_Interpreter = interDao.getInterpreter(interpreter);
             interpreter.setFiles(
                     FileUtils.modiOneFiles(
                             ori_Interpreter.getFiles(),
@@ -134,6 +136,23 @@ public class InterService extends BasicService{
                 logger.error(e.getMessage());
             }
         }
+
+        // 상태값 변경에 따른 알림
+        FIELD param = new FIELD();
+        param.setType_name("inter_state");
+        param.setValue("confirm");
+        FIELD confirmField = fieldDao.getField(param);
+        param.setValue("reject");
+        FIELD rejectField = fieldDao.getField(param);
+
+        if(interpreter.getState() == confirmField.getField()){
+            // 알림 TYPE interpreter_confirm : 통역사 승인
+            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_confirm", "통역사 신청이 승인되었습니다.",""));
+        } else if(interpreter.getState() == rejectField.getField()){
+            // 알림 TYPE interpreter_reject : 통역사 거절
+            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_reject", "통역사 신청이 반려되었습니다.",interpreter.getReject_msg()));
+        }
+
         return interDao.updateInterpreter(interpreter);
     }
 

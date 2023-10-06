@@ -77,6 +77,10 @@
             )
     </select>
 
+    <select id="getChatRoom" resultType="com.jamie.home.api.model.ROOM">
+        SELECT * FROM ROOM WHERE ROOM = #{room}
+    </select>
+
     <select id="getChatLast" resultType="com.jamie.home.api.model.CHAT">
         SELECT * FROM CHAT WHERE 1=1 AND ROOM = #{room} ORDER BY CHAT DESC LIMIT 0,1
     </select>

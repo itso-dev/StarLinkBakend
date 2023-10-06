@@ -1,5 +1,6 @@
 package com.jamie.home.api.dao;
 
+import com.jamie.home.api.model.INFO;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.SEARCH;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,4 +18,10 @@ public interface MemberDao {
     Integer insertMember(MEMBER member);
     Integer updateMember(MEMBER member);
     Integer deleteMember(MEMBER member);
+    Integer insertMemberInfo(INFO info);
+    Integer updateMemberInfoCheck(INFO info);
+    Integer updateMemberInfoCheckAll(INFO info);
+    List<INFO> getListMemberInfo(SEARCH search);
+    Integer getListMemberInfoCnt(SEARCH search);
+
 }

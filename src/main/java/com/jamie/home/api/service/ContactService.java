@@ -1,6 +1,7 @@
 package com.jamie.home.api.service;
 
 import com.jamie.home.api.model.CONTACT;
+import com.jamie.home.api.model.INFO;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.SEARCH;
 import com.jamie.home.util.FileUtils;
@@ -57,6 +58,10 @@ public class ContactService extends BasicService{
             );
         } catch (Exception e) {
             contact.setFiles(null);
+        }
+        if(ori_contact.getAnswer() == null && contact.getAnswer() != null){
+            // 알림 TYPE contact_answer : 관리자 문의 답변
+            memberDao.insertMemberInfo(new INFO(contact.getMember(), ori_contact.getContact(), "contact_answer", "새로운 문의 답변이 도착했습니다.",""));
         }
         return contactDao.updateContact(contact);
     }

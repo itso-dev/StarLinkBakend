@@ -88,6 +88,22 @@ public class InterController {
         }
     }
 
+    @RequestMapping(value="/{key}/col", method= RequestMethod.PUT)
+    public ResponseOverlays modifyOnlyCol(@PathVariable("key") int key, @Validated @RequestBody INTERPRETER interpreter) {
+        try {
+            interpreter.setInterpreter(key);
+            int result = interService.modify(interpreter);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_INTERPRETER_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_FAIL", false);
+        }
+    }
+
     @RequestMapping(value="/{key}", method= RequestMethod.DELETE)
     public ResponseOverlays remove(@PathVariable("key") int key) {
         try {

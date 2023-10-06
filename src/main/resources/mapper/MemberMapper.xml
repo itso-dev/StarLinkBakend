@@ -80,4 +80,55 @@
     <delete id="deleteMember">
         DELETE FROM MEMBER WHERE MEMBER = #{member}
     </delete>
+
+    <insert id="insertMemberInfo">
+        INSERT INTO MEMBER_INFO (
+            MEMBER, `KEY`, INFO_TYPE, TITLE, CONTENT
+        ) VALUES (
+            #{member}, #{key}, #{info_type}, #{title}, #{content}
+        )
+    </insert>
+
+    <update id="updateMemberInfoCheck">
+        UPDATE MEMBER_INFO SET UPD_DATE = NOW(), CHECK_YN = TRUE WHERE MEMBER_INFO = #{member_info}
+    </update>
+
+    <update id="updateMemberInfoCheckAll">
+        UPDATE MEMBER_INFO SET UPD_DATE = NOW(), CHECK_YN = TRUE WHERE MEMBER = #{member}
+    </update>
+
+    <sql id="listInfo">
+        <if test="check_yn != null">
+            AND CHECK_YN = #{check_yn}
+        </if>
+    </sql>
+    <sql id="listOrderInfo">
+        ORDER BY CHECK_YN,
+        <if test="order_type != null">
+            <choose>
+                <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
+            </choose>
+        </if>
+        MEMBER_INFO DESC
+    </sql>
+
+    <select id="getListMemberInfo" resultType="com.jamie.home.api.model.INFO">
+        SELECT *
+        FROM MEMBER_INFO
+        WHERE 1=1
+        AND MEMBER = #{member}
+        <include refid="listInfo"></include>
+        <include refid="listOrderInfo"></include>
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListMemberInfoCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM MEMBER_INFO
+        WHERE 1=1
+        AND MEMBER = #{member}
+        <include refid="listInfo"></include>
+    </select>
 </mapper>

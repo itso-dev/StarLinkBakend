@@ -31,6 +31,7 @@ public class INTERPRETER {
     private String extra;
     private String files;
     private Integer state;
+    private String reject_msg;
 
     private ArrayList<MultipartFile> files_new;
     private String files_del;

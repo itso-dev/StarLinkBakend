@@ -18,5 +18,6 @@ public interface ChatDao {
     Integer updateChat(CHAT chat);
     Integer deleteChat(CHAT chat);
     List<ROOM> getListChatRoom(SEARCH search);
+    ROOM getChatRoom(ROOM room);
     CHAT getChatLast(CHAT param);
 }

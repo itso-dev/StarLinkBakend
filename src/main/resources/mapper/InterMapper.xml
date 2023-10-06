@@ -104,6 +104,7 @@
         <if test="extra != null">,EXTRA = #{extra}</if>
         <if test="files != null">,FILES = #{files}</if>
         <if test="state != null">,STATE = #{state}</if>
+        <if test="reject_msg != null">,REJECT_MSG = #{reject_msg}</if>
         WHERE INTERPRETER = #{interpreter}
     </update>
 

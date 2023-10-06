@@ -1,7 +1,9 @@
 package com.jamie.home.api.controller;
 
+import com.jamie.home.api.model.INFO;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.ResponseOverlays;
+import com.jamie.home.api.model.common.SEARCH;
 import com.jamie.home.api.model.common.TOKEN;
 import com.jamie.home.api.service.BasicService;
 import com.jamie.home.api.service.MemberService;
@@ -21,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("/member/*")
@@ -185,6 +188,56 @@ public class MemberController {
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/{key}/info/list", method= RequestMethod.POST)
+    public ResponseOverlays list(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
+        try {
+            search.setMember(key);
+            if(search.getPage() != null && search.getPage_block() != null){
+                search.calStart();
+            }
+            List<INFO> list = memberService.listMemberInfo(search);
+            if(list != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", list, list.size());
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", null,0);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", false,0);
+        }
+    }
+
+    @RequestMapping(value="/info/{key}/check", method= RequestMethod.PUT)
+    public ResponseOverlays modifyMemberInfoCheck(@PathVariable("key") int key, @Validated @RequestBody INFO info) {
+        try {
+            info.setMember_info(key);
+            int result = memberService.modifyMemberInfoCheck(info);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_MEMBER_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/info/check/all", method= RequestMethod.PUT)
+    public ResponseOverlays modifyMemberInfoCheckAll(@Validated @RequestBody INFO info) {
+        try {
+            int result = memberService.modifyMemberInfoCheckAll(info);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_MEMBER_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_FAIL", null);
         }
     }
 }

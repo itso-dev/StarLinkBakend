@@ -25,6 +25,7 @@ public class SEARCH {
     private String email;
     @Enumerated(EnumType.STRING)
     private ROLE role;
+    private Boolean check_yn;
 
     // 통역사
     private Integer interpreter;

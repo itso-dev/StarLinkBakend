@@ -35,8 +35,8 @@
         <if test="field != null">
             AND FIELD = #{field}
         </if>
-        <if test="type_name != null and name != null">
-            AND TYPE_NAME = #{type_name} AND NAME = #{name}
+        <if test="type_name != null and value != null">
+            AND TYPE_NAME = #{type_name} AND VALUE = #{value}
         </if>
     </select>
 </mapper>

@@ -114,4 +114,19 @@ public class ChatController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CHAT_FAIL", false,0);
         }
     }
+
+    @RequestMapping(value="/room/{key}", method= RequestMethod.GET)
+    public ResponseOverlays getRoom(@PathVariable("key") int key) {
+        try {
+            ROOM result = chatService.getRoom(new ROOM(key));
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CHAT_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CHAT_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CHAT_FAIL", null);
+        }
+    }
 }

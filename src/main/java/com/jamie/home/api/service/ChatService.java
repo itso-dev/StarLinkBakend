@@ -1,6 +1,7 @@
 package com.jamie.home.api.service;
 
 import com.jamie.home.api.model.CHAT;
+import com.jamie.home.api.model.INFO;
 import com.jamie.home.api.model.INTERPRETER;
 import com.jamie.home.api.model.ROOM;
 import com.jamie.home.api.model.common.MEMBER;
@@ -33,6 +34,18 @@ public class ChatService extends BasicService{
                         uploadDir
                 )
         );
+
+        ROOM room = chatDao.getChatRoom(new ROOM(chat.getRoom()));
+        INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(room.getInterpreter()));
+        if(room.getMember() != chat.getMember()){
+            // 알림 TYPE chat_new : 새로운 메세지
+            memberDao.insertMemberInfo(new INFO(room.getMember(), room.getRoom(), "chat_new", "새로운 메시지가 도착했습니다.",""));
+        }
+        if(interpreter.getMember() != chat.getMember()){
+            // 알림 TYPE chat_new : 새로운 메세지
+            memberDao.insertMemberInfo(new INFO(interpreter.getMember(), room.getRoom(), "chat_new", "새로운 메시지가 도착했습니다.",""));
+        }
+
         return chatDao.insertChat(chat);
     }
 
@@ -55,5 +68,9 @@ public class ChatService extends BasicService{
             result.get(i).getOther_info().put("chat",chatDao.getChatLast(param));
         }
         return result;
+    }
+
+    public ROOM getRoom(ROOM room){
+        return chatDao.getChatRoom(room);
     }
 }

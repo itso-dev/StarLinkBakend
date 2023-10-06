@@ -1,5 +1,6 @@
 package com.jamie.home.api.service;
 
+import com.jamie.home.api.model.INFO;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.ROLE;
 import com.jamie.home.api.model.common.SEARCH;
@@ -60,5 +61,17 @@ public class MemberService extends BasicService{
 
     public Integer remove(MEMBER member) {
         return memberDao.deleteMember(member);
+    }
+
+    public List<INFO> listMemberInfo(SEARCH search) {
+        return memberDao.getListMemberInfo(search);
+    }
+
+    public Integer modifyMemberInfoCheck(INFO info) {
+        return memberDao.updateMemberInfoCheck(info);
+    }
+
+    public Integer modifyMemberInfoCheckAll(INFO info) {
+        return memberDao.updateMemberInfoCheckAll(info);
     }
 }
