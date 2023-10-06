@@ -44,6 +44,8 @@ public class BasicService {
     InterDao interDao;
     @Autowired
     BookingDao bookingDao;
+    @Autowired
+    ChatDao chatDao;
 
     public List<FIELD> listField(SEARCH search) {
         return fieldDao.getListField(search);

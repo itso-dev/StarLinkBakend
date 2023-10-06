@@ -41,6 +41,11 @@ public class SEARCH {
     private Integer pickup;
     private Integer gender;
 
+    // 채팅
+    private Integer room;
+    private Integer chat;
+    private String chat_type;
+
     public void calStart(){
         this.start = (this.page-1) * this.page_block;
     }

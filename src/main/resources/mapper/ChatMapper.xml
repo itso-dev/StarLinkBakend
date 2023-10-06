@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jamie.home.api.dao.ChatDao">
+    <sql id="list">
+        <if test="search_keyword != null">
+            <if test="search_type == ''.toString()">
+            </if>
+        </if>
+        <if test="chat_type != null">
+            <choose>
+                <when test="chat_type == 'latest_chat_list'.toString()">AND CHAT > #{chat}</when>
+                <when test="chat_type == 'before_chat_list'.toString()">AND #{chat} > CHAT</when>
+            </choose>
+        </if>
+    </sql>
+    <sql id="order">
+        ORDER BY
+        <if test="order_type != null">
+            <choose>
+                <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
+            </choose>
+        </if>
+        CHAT DESC
+    </sql>
+
+    <select id="getListChat" resultType="com.jamie.home.api.model.CHAT">
+        SELECT *
+        FROM CHAT
+        WHERE 1=1
+            AND ROOM = #{room}
+        <include refid="list"></include>
+        <include refid="order"></include>
+        <if test="chat_type != null">
+            <choose>
+                <when test="chat_type == 'first_chat_list'.toString()">LIMIT 0, #{page_block}</when>
+                <when test="chat_type == 'before_chat_list'.toString()">LIMIT 0, #{page_block}</when>
+            </choose>
+        </if>
+    </select>
+
+    <select id="getListChatCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM CHAT
+        WHERE 1=1
+            AND ROOM = #{room}
+        <include refid="list"></include>
+    </select>
+
+    <select id="getChat" resultType="com.jamie.home.api.model.CHAT">
+        SELECT *
+        FROM CHAT
+        WHERE CHAT = #{chat}
+    </select>
+
+    <insert id="insertChat" parameterType="com.jamie.home.api.model.CHAT" useGeneratedKeys="true" keyProperty="chat">
+        INSERT INTO CHAT (ROOM, MEMBER, TYPE, CONTENT) VALUES (#{room}, #{member}, #{type}, #{content})
+    </insert>
+
+    <update id="updateChat">
+        UPDATE CHAT SET UPD_DATE = now()
+        <if test="question != null">,CONTENT = #{content}</if>
+        WHERE CHAT = #{chat}
+    </update>
+
+    <delete id="deleteChat">
+        DELETE FROM CHAT WHERE CHAT = #{chat}
+    </delete>
+
+    <select id="getListChatRoom" resultType="com.jamie.home.api.model.ROOM">
+        SELECT * FROM ROOM
+        WHERE 1=1
+            AND (
+                MEMBER = #{member}
+                OR
+                INTERPRETER IN (SELECT INTERPRETER FROM INTERPRETER WHERE MEMBER = #{member})
+            )
+    </select>
+
+    <select id="getChatLast" resultType="com.jamie.home.api.model.CHAT">
+        SELECT * FROM CHAT WHERE 1=1 AND ROOM = #{room} ORDER BY CHAT DESC LIMIT 0,1
+    </select>
+</mapper>
