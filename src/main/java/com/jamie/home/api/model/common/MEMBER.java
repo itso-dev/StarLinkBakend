@@ -29,6 +29,8 @@ public class MEMBER {
     private String address_detail;
     private Boolean marketing_yn;
     private String profile_file;
+    private String reg_date;
+    private String upd_date;
 
     private Boolean auto_login;
 

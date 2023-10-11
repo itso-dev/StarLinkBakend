@@ -43,6 +43,25 @@ public class MemberController {
     @Autowired
     private BasicService basicService;
 
+    @RequestMapping(value="/list", method= RequestMethod.POST)
+    public ResponseOverlays list(@Validated @RequestBody SEARCH search) {
+        try {
+            if(search.getPage() != null && search.getPage_block() != null){
+                search.calStart();
+            }
+            List<MEMBER> list = memberService.list(search);
+            if(list != null){
+                Integer cnt = memberService.listCnt(search);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_SUCCESS", list, cnt);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_NULL", null,0);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", false,0);
+        }
+    }
+
     @RequestMapping(value="/login", method= RequestMethod.POST)
     public ResponseOverlays login(
             @Value("${jwt.token-validity-in-seconds}") Double nomalSec,
@@ -192,7 +211,7 @@ public class MemberController {
     }
 
     @RequestMapping(value="/{key}/info/list", method= RequestMethod.POST)
-    public ResponseOverlays list(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
+    public ResponseOverlays listInfo(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
         try {
             search.setMember(key);
             if(search.getPage() != null && search.getPage_block() != null){

@@ -1,6 +1,7 @@
 package com.jamie.home.api.dao;
 
 import com.jamie.home.api.model.INTERPRETER;
+import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.SEARCH;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -21,4 +22,5 @@ public interface InterDao {
     List<Integer> getListInterpreterMultiChoice(Integer interpreter, String type_value);
     void deleteInterpreterMultiChoice(Map<String, Object> param);
     Integer updateInterpreterLike(SEARCH search);
+    INTERPRETER getInterpreterByMemberKey(MEMBER member);
 }

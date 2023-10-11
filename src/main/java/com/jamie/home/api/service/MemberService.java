@@ -1,6 +1,7 @@
 package com.jamie.home.api.service;
 
 import com.jamie.home.api.model.INFO;
+import com.jamie.home.api.model.INTERPRETER;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.ROLE;
 import com.jamie.home.api.model.common.SEARCH;
@@ -14,7 +15,11 @@ import java.util.List;
 @Transactional
 public class MemberService extends BasicService{
     public List<MEMBER> list(SEARCH search) {
-        return memberDao.getListMember(search);
+        List<MEMBER> result = memberDao.getListMember(search);
+        for(int i=0; i<result.size(); i++){
+            setDetailInfo(result.get(i));
+        }
+        return result;
     }
 
     public Integer listCnt(SEARCH search) {
@@ -23,7 +28,12 @@ public class MemberService extends BasicService{
 
     public MEMBER get(MEMBER member){
         MEMBER result = memberDao.getMember(member);
+        setDetailInfo(result);
         return result;
+    }
+
+    private void setDetailInfo(MEMBER member) {
+        member.getOther_info().put("interpreter_info", interDao.getInterpreterByMemberKey(member));
     }
 
     public MEMBER getMemberByCol(MEMBER member){

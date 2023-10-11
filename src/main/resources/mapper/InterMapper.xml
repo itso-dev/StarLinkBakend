@@ -133,4 +133,8 @@
     <insert id="updateInterpreterLike">
         CALL UPDATE_INTERPRETER_LIKE(#{interpreter}, #{member})
     </insert>
+
+    <select id="getInterpreterByMemberKey" resultType="com.jamie.home.api.model.INTERPRETER">
+        SELECT * FROM INTERPRETER WHERE MEMBER = #{member}
+    </select>
 </mapper>
