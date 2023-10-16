@@ -23,6 +23,7 @@ public class ContactService extends BasicService{
 
     private void setDetailInfo(CONTACT contact){
         contact.getOther_info().put("member_info",memberDao.getMember(new MEMBER(contact.getMember())));
+        contact.getOther_info().put("interpreter_info",interDao.getInterpreterByMemberKey(new MEMBER(contact.getMember())));
     }
 
     public Integer listCnt(SEARCH search) {
