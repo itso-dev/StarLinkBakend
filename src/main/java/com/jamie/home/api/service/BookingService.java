@@ -25,7 +25,16 @@ public class BookingService extends BasicService{
     }
 
     public BOOKING get(BOOKING booking){
-        return bookingDao.getBooking(booking);
+        BOOKING result = bookingDao.getBooking(booking);
+        setDetailInfo(result);
+        return result;
+    }
+
+    private void setDetailInfo(BOOKING booking) {
+        INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(booking.getInterpreter()));
+        interpreter.getOther_info().put("member_info",memberDao.getMember(new MEMBER(interpreter.getMember())));
+        booking.getOther_info().put("interpreter_info", interpreter);
+        booking.getOther_info().put("member_info", memberDao.getMember(new MEMBER(booking.getMember())));
     }
 
     public Integer save(BOOKING booking) {
@@ -63,7 +72,15 @@ public class BookingService extends BasicService{
     }
 
     public REPORT getReport(REPORT report) {
-        return bookingDao.getBookingReport(report);
+        REPORT result = bookingDao.getBookingReport(report);
+        setDetailReportInfo(result);
+        return result;
+    }
+
+    private void setDetailReportInfo(REPORT report) {
+        BOOKING booking = bookingDao.getBooking(new BOOKING(report.getBooking()));
+        setDetailInfo(booking);
+        report.getOther_info().put("booking_info", booking);
     }
 
     public Integer saveReport(REPORT report) {
@@ -91,5 +108,30 @@ public class BookingService extends BasicService{
             report.setFiles(null);
         }
         return bookingDao.updateBookingReport(report);
+    }
+
+    public List<REPORT> listReport(SEARCH search) {
+        List<REPORT> result = bookingDao.getListBookingReport(search);
+        for(int i=0; i<result.size(); i++){
+            setDetailReportInfo(result.get(i));
+        }
+        return result;
+    }
+
+    public Integer listReportCnt(SEARCH search) {
+        return bookingDao.getListBookingReportCnt(search);
+    }
+
+    public Integer modifyReportStop(REPORT report, INTERPRETER interpreter) {
+        Integer result = bookingDao.updateBookingReport(report);
+        interpreter.setState((Integer) report.getOther_info().get("state"));
+        interDao.updateInterpreter(interpreter);
+        return result;
+    }
+
+    public Integer modifyReportRemove(REPORT report, INTERPRETER interpreter) {
+        Integer result = bookingDao.updateBookingReport(report);
+        interDao.deleteInterpreter(interpreter);
+        return result;
     }
 }

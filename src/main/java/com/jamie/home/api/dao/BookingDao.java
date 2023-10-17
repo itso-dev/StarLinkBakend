@@ -20,4 +20,6 @@ public interface BookingDao {
     REPORT getBookingReport(REPORT report);
     Integer insertBookingReport(REPORT report);
     Integer updateBookingReport(REPORT report);
+    List<REPORT> getListBookingReport(SEARCH search);
+    Integer getListBookingReportCnt(SEARCH search);
 }

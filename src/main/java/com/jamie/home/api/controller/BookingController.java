@@ -1,6 +1,7 @@
 package com.jamie.home.api.controller;
 
 import com.jamie.home.api.model.BOOKING;
+import com.jamie.home.api.model.INTERPRETER;
 import com.jamie.home.api.model.REPORT;
 import com.jamie.home.api.model.common.ResponseOverlays;
 import com.jamie.home.api.model.common.SEARCH;
@@ -104,6 +105,25 @@ public class BookingController {
         }
     }
 
+    @RequestMapping(value="/report/list", method= RequestMethod.POST)
+    public ResponseOverlays listReport(@Validated @RequestBody SEARCH search) {
+        try {
+            if(search.getPage() != null && search.getPage_block() != null){
+                search.calStart();
+            }
+            List<REPORT> list = bookingService.listReport(search);
+            if(list != null){
+                Integer cnt = bookingService.listReportCnt(search);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_BOOKING_SUCCESS", list, cnt);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BOOKING_NULL", null,0);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_BOOKING_FAIL", false,0);
+        }
+    }
+
     @RequestMapping(value="/report/{key}", method= RequestMethod.GET)
     public ResponseOverlays getReport(@PathVariable("key") int key) {
         try {
@@ -135,11 +155,43 @@ public class BookingController {
         }
     }
 
-    @RequestMapping(value="/report/{key}", method= RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value="/report/{key}", method= RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseOverlays modifyReport(@PathVariable("key") int key, @Validated @ModelAttribute REPORT report) {
         try {
             report.setBooking_report(key);
             int result = bookingService.modifyReport(report);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BOOKING_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_BOOKING_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BOOKING_FAIL", false);
+        }
+    }
+
+    @RequestMapping(value="/report/{key}/stop/{key2}", method= RequestMethod.PUT)
+    public ResponseOverlays modifyReportStop(@PathVariable("key") int key, @PathVariable("key2") int key2, @Validated @RequestBody REPORT report) {
+        try {
+            report.setBooking_report(key);
+            int result = bookingService.modifyReportStop(report, new INTERPRETER(key2));
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BOOKING_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_BOOKING_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BOOKING_FAIL", false);
+        }
+    }
+
+    @RequestMapping(value="/report/{key}/remove/{key2}", method= RequestMethod.PUT)
+    public ResponseOverlays modifyReportRemove(@PathVariable("key") int key, @PathVariable("key2") int key2, @Validated @RequestBody REPORT report) {
+        try {
+            report.setBooking_report(key);
+            int result = bookingService.modifyReportRemove(report, new INTERPRETER(key2));
             if(result == 0){
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_BOOKING_NOT_SAVE", false);
             } else {

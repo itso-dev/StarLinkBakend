@@ -17,7 +17,7 @@ public class REPORT {
     private Integer booking;
     private String title;
     private String content;
-    private String answer;
+    private Integer state;
     private String files;
     private String reg_date;
     private String upd_date;

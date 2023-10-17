@@ -90,15 +90,49 @@
     </select>
 
     <insert id="insertBookingReport">
-        INSERT INTO BOOKING_REPORT (BOOKING, TITLE, CONTENT, FILES) VALUES (#{booking}, #{title}, #{content}, #{files})
+        INSERT INTO BOOKING_REPORT (BOOKING, TITLE, CONTENT, FILES, STATE) VALUES (#{booking}, #{title}, #{content}, #{files}, #{state})
     </insert>
 
     <update id="updateBookingReport">
         UPDATE BOOKING_REPORT SET UPD_DATE = now()
         <if test="title != null">,TITLE = #{title}</if>
         <if test="content != null">,CONTENT = #{content}</if>
-        <if test="answer != null">,ANSWER = #{answer}</if>
         <if test="files != null">,FILES = #{files}</if>
-        WHERE BOOKING = #{booking}
+        <if test="state != null">,STATE = #{state}</if>
+        WHERE BOOKING_REPORT = #{booking_report}
     </update>
+
+    <sql id="listReport">
+        <if test="search_keyword != null">
+            <if test="search_type == ''.toString()">
+            </if>
+        </if>
+    </sql>
+    <sql id="orderReport">
+        ORDER BY
+        <if test="order_type != null">
+            <choose>
+                <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
+            </choose>
+        </if>
+        BOOKING_REPORT DESC
+    </sql>
+
+    <select id="getListBookingReport" resultType="com.jamie.home.api.model.REPORT">
+        SELECT *
+        FROM BOOKING_REPORT
+        WHERE 1=1
+        <include refid="listReport"></include>
+        <include refid="orderReport"></include>
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListBookingReportCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM BOOKING
+        WHERE 1=1
+        <include refid="listReport"></include>
+    </select>
 </mapper>
