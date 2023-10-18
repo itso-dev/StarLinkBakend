@@ -29,6 +29,8 @@ public class INTERPRETER {
     private String profile;
     private String career;
     private String extra;
+    private String time_start;
+    private String time_end;
     private String files;
     private Integer state;
     private String reject_msg;

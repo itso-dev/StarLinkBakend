@@ -53,6 +53,7 @@
         <if test="order_type != null">
             <choose>
                 <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
+                <when test="order_type == 'like_desc'.toString()">(SELECT COUNT(*) FROM INTERPRETER_LIKE IL WHERE INTERPRETER.INTERPRETER = IL.INTERPRETER) DESC, </when>
             </choose>
         </if>
         INTERPRETER DESC
@@ -85,10 +86,10 @@
     <insert id="insertInterpreter" parameterType="com.jamie.home.api.model.INTERPRETER" useGeneratedKeys="true" keyProperty="interpreter">
         INSERT INTO INTERPRETER (
             MEMBER, COUNTRY, DAY_UNIT, DAY_PRICE, CAR, PICKUP, PICKUP_UNIT, PICKUP_PRICE,
-            INFO, PROFILE, CAREER, EXTRA, FILES, STATE
+            INFO, PROFILE, CAREER, EXTRA, TIME_START, TIME_END, FILES, STATE
         ) VALUE (
             #{member}, #{country}, #{day_unit}, #{day_price}, #{car}, #{pickup}, #{pickup_unit}, #{pickup_price},
-            #{info}, #{profile}, #{career}, #{extra}, #{files}, #{state}
+            #{info}, #{profile}, #{career}, #{extra}, #{time_start}, #{time_end}, #{files}, #{state}
         )
     </insert>
 
@@ -105,6 +106,8 @@
         <if test="profile != null">,PROFILE = #{profile}</if>
         <if test="career != null">,CAREER = #{career}</if>
         <if test="extra != null">,EXTRA = #{extra}</if>
+        <if test="time_start != null">,TIME_START = #{time_start}</if>
+        <if test="time_end != null">,TIME_END = #{time_end}</if>
         <if test="files != null">,FILES = #{files}</if>
         <if test="state != null">,STATE = #{state}</if>
         <if test="reject_msg != null">,REJECT_MSG = #{reject_msg}</if>
