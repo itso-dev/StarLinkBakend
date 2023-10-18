@@ -7,6 +7,11 @@
             <if test="search_type == ''.toString()">
             </if>
             <if test="search_type == null">
+                AND (
+                    MATCH(TITLE) AGAINST (CONCAT(#{search_keyword},'*') IN BOOLEAN MODE)
+                    OR
+                    MATCH(CONTENT) AGAINST (CONCAT(#{search_keyword},'*') IN BOOLEAN MODE)
+                )
             </if>
         </if>
     </sql>
