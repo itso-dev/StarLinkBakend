@@ -1,6 +1,7 @@
 package com.jamie.home.api.controller;
 
 import com.jamie.home.api.model.INTERPRETER;
+import com.jamie.home.api.model.RECOMMEND;
 import com.jamie.home.api.model.common.ResponseOverlays;
 import com.jamie.home.api.model.common.SEARCH;
 import com.jamie.home.api.service.InterService;
@@ -124,6 +125,72 @@ public class InterController {
         try {
             search.setInterpreter(key);
             int result = interService.like(search);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_INTERPRETER_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_FAIL", false);
+        }
+    }
+
+    @RequestMapping(value="/recommend/list", method= RequestMethod.POST)
+    public ResponseOverlays listRecommend(@Validated @RequestBody SEARCH search) {
+        try {
+            if(search.getPage() != null && search.getPage_block() != null){
+                search.calStart();
+            }
+            List<RECOMMEND> list = interService.listRecommend(search);
+            if(list != null){
+                Integer cnt = interService.listRecommendCnt(search);
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_INTERPRETER_SUCCESS", list, cnt);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_INTERPRETER_NULL", null,0);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_INTERPRETER_FAIL", false,0);
+        }
+    }
+
+    @RequestMapping(value="/{key}/recommend/save", method= RequestMethod.POST)
+    public ResponseOverlays saveRecomend(@PathVariable("key") int key, @Validated @RequestBody RECOMMEND recommend) {
+        try {
+            recommend.setInterpreter(key);
+            int result = interService.saveRecommend(recommend);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_INTERPRETER_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_FAIL", false);
+        }
+    }
+
+    @RequestMapping(value="/recommend/{key}", method= RequestMethod.PUT)
+    public ResponseOverlays modifyRecomend(@PathVariable("key") int key, @Validated @RequestBody RECOMMEND recommend) {
+        try {
+            recommend.setInterpreter_recommend(key);
+            int result = interService.modifyRecommend(recommend);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_INTERPRETER_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_FAIL", false);
+        }
+    }
+
+    @RequestMapping(value="/recommend/{key}", method= RequestMethod.DELETE)
+    public ResponseOverlays modifyRecomend(@PathVariable("key") int key) {
+        try {
+            int result = interService.removeRecommend(new RECOMMEND(key));
             if(result == 0){
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_INTERPRETER_NOT_SAVE", false);
             } else {

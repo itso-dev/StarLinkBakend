@@ -39,7 +39,6 @@ public class BookingService extends BasicService{
 
     public Integer save(BOOKING booking) {
         Integer result = bookingDao.insertBooking(booking);
-        // TODO 채팅 생성이 되어야함. 채팅으로 예약이 감.
         return result;
     }
 

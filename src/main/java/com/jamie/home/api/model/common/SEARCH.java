@@ -41,6 +41,8 @@ public class SEARCH {
     private Integer car;
     private Integer pickup;
     private Integer gender;
+    private Boolean recommend;
+    private List<Integer> location_list;
 
     // 채팅
     private Integer room;

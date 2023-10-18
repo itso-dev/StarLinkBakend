@@ -4,7 +4,8 @@
 <mapper namespace="com.jamie.home.api.dao.InterDao">
     <sql id="list">
         <if test="search_keyword != null">
-            <if test="search_type == ''.toString()">
+            <if test="search_type == 'name '.toString()">
+                AND MEMBER IN (SELECT MEMBER FROM MEMBER WHERE MATCH(NAME) AGAINST (CONCAT(#{search_keyword},'*') IN BOOLEAN MODE))
             </if>
             <if test="search_type == null">
             </if>
@@ -13,23 +14,25 @@
             AND COUNTRY = #{country}
         </if>
         <if test="location != null">
-            AND INTERPRETER IN (SELECT DISTINCT INTERPRETER FROM INTERPRETER_LOCATION WHERE FIELD = #{location})
+            AND INTERPRETER IN (SELECT DISTINCT INTERPRETER FROM INTERPRETER_MULTI_CHOICE WHERE FIELD = #{location} AND TYPE_VALUE = 'location')
         </if>
         <if test="category_list != null">
             AND INTERPRETER IN (
                 SELECT DISTINCT INTERPRETER
-                FROM INTERPRETER_CATEGORY
-                WHERE FIELD IN
+                FROM INTERPRETER_MULTI_CHOICE
+                WHERE 1=1
+                    AND TYPE_VALUE = 'category'
+                    AND FIELD IN
                 <foreach collection="category_list" item="item" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             )
         </if>
         <if test="language != null">
-            AND INTERPRETER IN (SELECT DISTINCT INTERPRETER FROM INTERPRETER_LANGUAGE WHERE FIELD = #{language})
+            AND INTERPRETER IN (SELECT DISTINCT INTERPRETER FROM INTERPRETER_MULTI_CHOICE WHERE FIELD = #{language} AND TYPE_VALUE = 'language')
         </if>
         <if test="start_date != null and end_date != null">
-
+            <!--TODO 해야함-->
         </if>
         <if test="day_unit != null">
             AND DAY_UNIT = #{day_unit}
@@ -137,4 +140,60 @@
     <select id="getInterpreterByMemberKey" resultType="com.jamie.home.api.model.INTERPRETER">
         SELECT * FROM INTERPRETER WHERE MEMBER = #{member}
     </select>
+
+    <sql id="listRecommend">
+        <if test="search_keyword != null">
+            <if test="search_type == ''.toString()">
+            </if>
+            <if test="search_type == null">
+            </if>
+        </if>
+        <if test="location_list != null">
+            AND LOCATION IN
+            <foreach collection="location_list" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </sql>
+    <sql id="orderRecommend">
+        ORDER BY
+        <if test="order_type != null">
+            <choose>
+                <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
+            </choose>
+        </if>
+        INTERPRETER_RECOMMEND DESC
+    </sql>
+
+    <select id="getListInterpreterRecommend" resultType="com.jamie.home.api.model.RECOMMEND">
+        SELECT *
+        FROM INTERPRETER_RECOMMEND
+        WHERE 1=1
+        <include refid="listRecommend"></include>
+        <include refid="orderRecommend"></include>
+        <if test="start != null">
+            LIMIT #{start}, #{page_block}
+        </if>
+    </select>
+
+    <select id="getListInterpreterRecommendCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM INTERPRETER_RECOMMEND
+        WHERE 1=1
+        <include refid="list"></include>
+    </select>
+
+    <insert id="insertInterpreterRecommend">
+        INSERT INTO INTERPRETER_RECOMMEND (INTERPRETER, LOCATION) VALUES (#{interpreter}, #{location})
+    </insert>
+
+    <update id="updateInterpreterRecommend">
+        UPDATE INTERPRETER_RECOMMEND SET UPD_DATE = now()
+        <if test="sort != null">,SORT = #{sort}</if>
+        WHERE INTERPRETER_RECOMMEND = #{interpreter_recommend}
+    </update>
+
+    <delete id="deleteInterpreterRecommend">
+        DELETE FROM INTERPRETER_RECOMMEND WHERE INTERPRETER_RECOMMEND = #{interpreter_recommend}
+    </delete>
 </mapper>

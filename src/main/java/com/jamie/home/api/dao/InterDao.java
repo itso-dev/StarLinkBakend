@@ -1,6 +1,7 @@
 package com.jamie.home.api.dao;
 
 import com.jamie.home.api.model.INTERPRETER;
+import com.jamie.home.api.model.RECOMMEND;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.SEARCH;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,4 +24,9 @@ public interface InterDao {
     void deleteInterpreterMultiChoice(Map<String, Object> param);
     Integer updateInterpreterLike(SEARCH search);
     INTERPRETER getInterpreterByMemberKey(MEMBER member);
+    List<RECOMMEND> getListInterpreterRecommend(SEARCH search);
+    Integer getListInterpreterRecommendCnt(SEARCH search);
+    Integer insertInterpreterRecommend(RECOMMEND recommend);
+    Integer updateInterpreterRecommend(RECOMMEND recommend);
+    Integer deleteInterpreterRecommend(RECOMMEND recommend);
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jamie.home.api.controller.InterController;
 import com.jamie.home.api.model.INFO;
 import com.jamie.home.api.model.INTERPRETER;
+import com.jamie.home.api.model.RECOMMEND;
 import com.jamie.home.api.model.common.FIELD;
 import com.jamie.home.api.model.common.MEMBER;
 import com.jamie.home.api.model.common.SEARCH;
@@ -182,5 +183,35 @@ public class InterService extends BasicService{
 
     public int like(SEARCH search) {
         return interDao.updateInterpreterLike(search);
+    }
+
+    public List<RECOMMEND> listRecommend(SEARCH search) {
+        List<RECOMMEND> result = interDao.getListInterpreterRecommend(search);
+        for(int i=0; i<result.size(); i++){
+            setDetailRecommendInfo(result.get(i));
+        }
+        return result;
+    }
+
+    private void setDetailRecommendInfo(RECOMMEND recommend){
+        INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(recommend.getInterpreter()));
+        interpreter.getOther_info().put("member_info", memberDao.getMember(new MEMBER(interpreter.getMember())));
+        recommend.getOther_info().put("interpreter_info",interpreter);
+    }
+
+    public Integer listRecommendCnt(SEARCH search) {
+        return interDao.getListInterpreterRecommendCnt(search);
+    }
+
+    public Integer saveRecommend(RECOMMEND recommend) {
+        return interDao.insertInterpreterRecommend(recommend);
+    }
+
+    public Integer modifyRecommend(RECOMMEND recommend) {
+        return interDao.updateInterpreterRecommend(recommend);
+    }
+
+    public Integer removeRecommend(RECOMMEND recommend) {
+        return interDao.deleteInterpreterRecommend(recommend);
     }
 }
