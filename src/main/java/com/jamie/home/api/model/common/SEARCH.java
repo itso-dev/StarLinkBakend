@@ -44,6 +44,9 @@ public class SEARCH {
     private Boolean recommend;
     private List<Integer> location_list;
 
+    // 예약
+    private Boolean avail_date;
+
     // 채팅
     private Integer room;
     private Integer chat;

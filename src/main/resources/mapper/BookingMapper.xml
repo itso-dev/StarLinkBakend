@@ -13,6 +13,10 @@
         <if test="interpreter == null and member != null">
             AND MEMBER = #{member}
         </if>
+        <if test="avail_date">
+            AND INTERPRETER = #{interpreter}
+            AND STATE IN (SELECT FIELD FROM FIELD WHERE TYPE_NAME = 'booking_state' AND VALUE IN ('booking','confirm'))
+        </if>
     </sql>
     <sql id="order">
         ORDER BY
