@@ -199,4 +199,28 @@
     <delete id="deleteInterpreterRecommend">
         DELETE FROM INTERPRETER_RECOMMEND WHERE INTERPRETER_RECOMMEND = #{interpreter_recommend}
     </delete>
+
+    <select id="getInterpreterBookingEndCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM BOOKING
+        WHERE 1=1
+            AND INTERPRETER = #{interpreter}
+            AND STATE = (SELECT FIELD FROM FIELD WHERE TYPE_NAME = 'booking_state' AND VALUE = 'confirm')
+            AND DATE_FORMAT(NOW(),'%Y%m%d') > END
+    </select>
+
+    <select id="getInterpreterBookingEndGrade" resultType="java.lang.Float">
+        SELECT IFNULL(AVG(GRADE),0) FROM BOOKING
+        WHERE 1=1
+            AND INTERPRETER = #{interpreter}
+            AND STATE = (SELECT FIELD FROM FIELD WHERE TYPE_NAME = 'booking_state' AND VALUE = 'confirm')
+            AND DATE_FORMAT(NOW(),'%Y%m%d') > END
+    </select>
+
+    <select id="getInterpreterAverageChatTime" resultType="java.lang.Integer">
+        SELECT 0 FROM DUAL
+    </select>
+
+    <select id="getInterpreterLikeCnt" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM INTERPRETER_LIKE WHERE INTERPRETER = #{interpreter}
+    </select>
 </mapper>

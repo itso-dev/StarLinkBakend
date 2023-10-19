@@ -39,6 +39,10 @@ public class InterService extends BasicService{
         interpreter.getOther_info().put("location",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"location"));
         interpreter.getOther_info().put("category",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"category"));
         interpreter.getOther_info().put("language",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"language"));
+        interpreter.getOther_info().put("booking_cnt",interDao.getInterpreterBookingEndCnt(new INTERPRETER(interpreter.getInterpreter())));
+        interpreter.getOther_info().put("booking_grade",interDao.getInterpreterBookingEndGrade(new INTERPRETER(interpreter.getInterpreter())));
+        interpreter.getOther_info().put("average_time",interDao.getInterpreterAverageChatTime(new INTERPRETER(interpreter.getInterpreter())));
+        interpreter.getOther_info().put("like_cnt",interDao.getInterpreterLikeCnt(new INTERPRETER(interpreter.getInterpreter())));
     }
 
     public Integer listCnt(SEARCH search) {

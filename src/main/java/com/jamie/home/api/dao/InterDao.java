@@ -29,4 +29,8 @@ public interface InterDao {
     Integer insertInterpreterRecommend(RECOMMEND recommend);
     Integer updateInterpreterRecommend(RECOMMEND recommend);
     Integer deleteInterpreterRecommend(RECOMMEND recommend);
+    Integer getInterpreterBookingEndCnt(INTERPRETER interpreter);
+    Float getInterpreterBookingEndGrade(INTERPRETER interpreter);
+    Integer getInterpreterAverageChatTime(INTERPRETER interpreter);
+    Integer getInterpreterLikeCnt(INTERPRETER interpreter);
 }
