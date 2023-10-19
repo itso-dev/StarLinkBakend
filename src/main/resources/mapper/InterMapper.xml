@@ -5,7 +5,7 @@
     <sql id="list">
         <if test="search_keyword != null">
             <if test="search_type == 'name '.toString()">
-                AND MEMBER IN (SELECT MEMBER FROM MEMBER WHERE MATCH(NAME) AGAINST (CONCAT(#{search_keyword},'*') IN BOOLEAN MODE))
+                AND MEMBER IN (SELECT MEMBER FROM MEMBER WHERE NAME LIKE CONCAT('%',#{search_keyword},'%'))
             </if>
             <if test="search_type == null">
             </if>
@@ -32,7 +32,11 @@
             AND INTERPRETER IN (SELECT DISTINCT INTERPRETER FROM INTERPRETER_MULTI_CHOICE WHERE FIELD = #{language} AND TYPE_VALUE = 'language')
         </if>
         <if test="start_date != null and end_date != null">
-            <!--TODO 해야함-->
+            AND (
+                SELECT COUNT(*) FROM BOOKING WHERE 1=1
+                    AND BOOKING.INTERPRETER = INTERPRETER.INTERPRETER
+                    AND !(#{start_date} > END OR START > #{end_date})
+            ) = 0
         </if>
         <if test="day_unit != null">
             AND DAY_UNIT = #{day_unit}
@@ -54,6 +58,14 @@
             <choose>
                 <when test="order_type == 'reg_date_desc'.toString()">REG_DATE DESC, </when>
                 <when test="order_type == 'like_desc'.toString()">(SELECT COUNT(*) FROM INTERPRETER_LIKE IL WHERE INTERPRETER.INTERPRETER = IL.INTERPRETER) DESC, </when>
+                <when test="order_type == 'grade_desc'.toString()">
+                    (
+                        SELECT IFNULL(AVG(GRADE),0) FROM BOOKING WHERE 1=1
+                            AND BOOKING.INTERPRETER = INTERPRETER.INTERPRETER
+                            AND STATE = (SELECT FIELD FROM FIELD WHERE TYPE_NAME = 'booking_state' AND VALUE = 'confirm')
+                            AND DATE_FORMAT(NOW(),'%Y%m%d') > END
+                    ) DESC,
+                </when>
             </choose>
         </if>
         INTERPRETER DESC

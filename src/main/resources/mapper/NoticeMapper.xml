@@ -8,9 +8,9 @@
             </if>
             <if test="search_type == null">
                 AND (
-                    MATCH(TITLE) AGAINST (CONCAT(#{search_keyword},'*') IN BOOLEAN MODE)
+                    TITLE LIKE CONCAT('%',#{search_keyword},'%')
                     OR
-                    MATCH(CONTENT) AGAINST (CONCAT(#{search_keyword},'*') IN BOOLEAN MODE)
+                    CONTENT LIKE CONCAT('%',#{search_keyword},'%')
                 )
             </if>
         </if>
