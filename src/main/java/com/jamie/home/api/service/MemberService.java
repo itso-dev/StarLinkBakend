@@ -84,4 +84,9 @@ public class MemberService extends BasicService{
     public Integer modifyMemberInfoCheckAll(INFO info) {
         return memberDao.updateMemberInfoCheckAll(info);
     }
+
+    public Boolean matchPassword(MEMBER member) {
+        MEMBER member_info = memberDao.getMember(member);
+        return encoder.matches(member.getPassword(), member_info.getPassword());
+    }
 }

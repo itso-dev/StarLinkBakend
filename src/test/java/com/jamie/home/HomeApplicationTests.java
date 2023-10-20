@@ -32,6 +32,8 @@ class HomeApplicationTests {
 
         System.out.println(insertKeyList);
         System.out.println(deleteKeyList);
+        boolean b = encoder.matches("12341", "$2a$10$Zy7a5VRHRrMs77lrJ7hf3ea/OUEWTxuJHnNgUJkNzc7LLDn/xWAu2");
+        System.out.println(b);
 */
     }
 }

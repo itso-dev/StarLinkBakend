@@ -259,4 +259,20 @@ public class MemberController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/{key}/password/match", method= RequestMethod.POST)
+    public ResponseOverlays matchPassword(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
+        try {
+            member.setMember(key);
+            Boolean result = memberService.matchPassword(member);
+            if(result){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_TRUE", true);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FALSE", false);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", null);
+        }
+    }
 }
