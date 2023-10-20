@@ -199,7 +199,7 @@ public class InterService extends BasicService{
 
     private void setDetailRecommendInfo(RECOMMEND recommend){
         INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(recommend.getInterpreter()));
-        interpreter.getOther_info().put("member_info", memberDao.getMember(new MEMBER(interpreter.getMember())));
+        setDetailInfo(interpreter);
         recommend.getOther_info().put("interpreter_info",interpreter);
     }
 
