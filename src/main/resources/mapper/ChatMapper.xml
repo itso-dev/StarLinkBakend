@@ -84,4 +84,8 @@
     <select id="getChatLast" resultType="com.jamie.home.api.model.CHAT">
         SELECT * FROM CHAT WHERE 1=1 AND ROOM = #{room} ORDER BY CHAT DESC LIMIT 0,1
     </select>
+
+    <insert id="insertChatRoom" parameterType="com.jamie.home.api.model.ROOM" useGeneratedKeys="true" keyProperty="room">
+        INSERT INTO ROOM (MEMBER, INTERPRETER) VALUES (#{member}, #{interpreter})
+    </insert>
 </mapper>

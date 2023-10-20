@@ -229,7 +229,7 @@
     </select>
 
     <select id="getInterpreterAverageChatTime" resultType="java.lang.Integer">
-        SELECT 0 FROM DUAL
+        SELECT CAL_AVERAGE_TIME(#{interpreter})
     </select>
 
     <select id="getInterpreterLikeCnt" resultType="java.lang.Integer">

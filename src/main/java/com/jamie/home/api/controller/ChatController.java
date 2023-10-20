@@ -129,4 +129,19 @@ public class ChatController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CHAT_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/room/save", method= RequestMethod.POST)
+    public ResponseOverlays saveRoom(@Validated @RequestBody ROOM room) {
+        try {
+            int result = chatService.saveRoom(room);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CHAT_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_CHAT_SUCCESS", room);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CHAT_FAIL", false);
+        }
+    }
 }

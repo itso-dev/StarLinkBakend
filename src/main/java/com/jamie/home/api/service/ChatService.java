@@ -28,12 +28,14 @@ public class ChatService extends BasicService{
     }
 
     public Integer save(CHAT chat) {
-        chat.setContent(
-                FileUtils.saveFiles(
-                        chat.getFiles_new(),
-                        uploadDir
-                )
-        );
+        if(chat.getFiles_new() != null){
+            chat.setContent(
+                    FileUtils.saveFiles(
+                            chat.getFiles_new(),
+                            uploadDir
+                    )
+            );
+        }
 
         ROOM room = chatDao.getChatRoom(new ROOM(chat.getRoom()));
         INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(room.getInterpreter()));
@@ -72,5 +74,9 @@ public class ChatService extends BasicService{
 
     public ROOM getRoom(ROOM room){
         return chatDao.getChatRoom(room);
+    }
+
+    public Integer saveRoom(ROOM room) {
+        return chatDao.insertChatRoom(room);
     }
 }

@@ -20,4 +20,5 @@ public interface ChatDao {
     List<ROOM> getListChatRoom(SEARCH search);
     ROOM getChatRoom(ROOM room);
     CHAT getChatLast(CHAT param);
+    Integer insertChatRoom(ROOM room);
 }
