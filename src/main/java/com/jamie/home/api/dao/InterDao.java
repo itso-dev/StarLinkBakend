@@ -33,4 +33,5 @@ public interface InterDao {
     Float getInterpreterBookingEndGrade(INTERPRETER interpreter);
     Integer getInterpreterAverageChatTime(INTERPRETER interpreter);
     Integer getInterpreterLikeCnt(INTERPRETER interpreter);
+    void updateInterpreterStopState(INTERPRETER interpreter);
 }

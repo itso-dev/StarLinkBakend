@@ -34,6 +34,7 @@ public class INTERPRETER {
     private String files;
     private Integer state;
     private String reject_msg;
+    private String stop_date;
     private String reg_date;
     private String upd_date;
 

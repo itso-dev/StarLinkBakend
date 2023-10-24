@@ -33,11 +33,17 @@ public class MemberService extends BasicService{
     }
 
     private void setDetailInfo(MEMBER member) {
-        member.getOther_info().put("interpreter_info", interDao.getInterpreterByMemberKey(member));
+        INTERPRETER interpreter = interDao.getInterpreterByMemberKey(member);
+        if(interpreter.getStop_date() != null){
+            interDao.updateInterpreterStopState(interpreter);
+        }
+        member.getOther_info().put("interpreter_info", interpreter);
+
     }
 
     public MEMBER getMemberByCol(MEMBER member){
         MEMBER result = memberDao.getMemberByCol(member);
+        setDetailInfo(result);
         return result;
     }
 

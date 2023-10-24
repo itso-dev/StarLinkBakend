@@ -123,6 +123,7 @@
         <if test="files != null">,FILES = #{files}</if>
         <if test="state != null">,STATE = #{state}</if>
         <if test="reject_msg != null">,REJECT_MSG = #{reject_msg}</if>
+        <if test="stop_date != null">,STOP_DATE = #{stop_date}</if>
         WHERE INTERPRETER = #{interpreter}
     </update>
 
@@ -235,4 +236,12 @@
     <select id="getInterpreterLikeCnt" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM INTERPRETER_LIKE WHERE INTERPRETER = #{interpreter}
     </select>
+
+    <update id="updateInterpreterStopState">
+        UPDATE INTERPRETER SET UPD_DATE = now()
+            ,STATE = (SELECT FIELD FROM FIELD WHERE TYPE_NAME = 'inter_state' AND VALUE = 'confirm')
+            ,STOP_DATE = NULL
+        WHERE INTERPRETER = #{interpreter}
+            AND DATEDIFF(NOW(), STOP_DATE) >= 7;
+    </update>
 </mapper>

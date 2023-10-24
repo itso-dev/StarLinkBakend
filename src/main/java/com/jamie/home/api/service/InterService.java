@@ -14,10 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -149,6 +147,8 @@ public class InterService extends BasicService{
         FIELD confirmField = fieldDao.getField(param);
         param.setValue("reject");
         FIELD rejectField = fieldDao.getField(param);
+        param.setValue("stop");
+        FIELD stopField = fieldDao.getField(param);
 
         if(interpreter.getState() == confirmField.getField()){
             // 알림 TYPE interpreter_confirm : 통역사 승인
@@ -156,6 +156,10 @@ public class InterService extends BasicService{
         } else if(interpreter.getState() == rejectField.getField()){
             // 알림 TYPE interpreter_reject : 통역사 거절
             memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_reject", "통역사 신청이 반려되었습니다.",interpreter.getReject_msg()));
+        } else if(interpreter.getState() == stopField.getField()){
+            // 알림 TYPE interpreter_reject : 통역사 정지
+            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_stop", "통역사 자격이 정지되었습니다.","7일간 통역사 활동을 할 수 없습니다."));
+            interpreter.setStop_date(new SimpleDateFormat("yyyyMMdd").format(new Date()));
         }
 
         return interDao.updateInterpreter(interpreter);
