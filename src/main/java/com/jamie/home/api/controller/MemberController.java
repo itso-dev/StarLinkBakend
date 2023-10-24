@@ -291,4 +291,20 @@ public class MemberController {
             return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", null);
         }
     }
+
+    @RequestMapping(value="/{key}/interpreter/like", method= RequestMethod.POST)
+    public ResponseOverlays getLike(@PathVariable("key") int key, @Validated @RequestBody SEARCH search) {
+        try {
+            search.setMember(key);
+            Boolean result = memberService.getLikeYn(search);
+            if(result){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_MEMBER_TRUE", true);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FALSE", false);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_MEMBER_FAIL", null);
+        }
+    }
 }

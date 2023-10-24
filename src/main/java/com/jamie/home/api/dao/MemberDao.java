@@ -23,5 +23,5 @@ public interface MemberDao {
     Integer updateMemberInfoCheckAll(INFO info);
     List<INFO> getListMemberInfo(SEARCH search);
     Integer getListMemberInfoCnt(SEARCH search);
-
+    Boolean getInterpreterLikeYn(SEARCH search);
 }

@@ -131,4 +131,12 @@
         AND MEMBER = #{member}
         <include refid="listInfo"></include>
     </select>
+
+    <select id="getInterpreterLikeYn" resultType="java.lang.Boolean">
+        SELECT IF(COUNT(*),TRUE,FALSE)
+        FROM INTERPRETER_LIKE
+        WHERE 1=1
+            AND MEMBER = #{member}
+            AND INTERPRETER = #{interpreter}
+    </select>
 </mapper>

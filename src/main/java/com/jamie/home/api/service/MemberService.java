@@ -89,4 +89,8 @@ public class MemberService extends BasicService{
         MEMBER member_info = memberDao.getMember(member);
         return encoder.matches(member.getPassword(), member_info.getPassword());
     }
+
+    public Boolean getLikeYn(SEARCH search) {
+        return memberDao.getInterpreterLikeYn(search);
+    }
 }
