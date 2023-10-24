@@ -149,6 +149,22 @@ public class MemberController {
         }
     }
 
+    @RequestMapping(value="/{key}/password", method= RequestMethod.PUT)
+    public ResponseOverlays modifyPassword(@PathVariable("key") int key, @Validated @RequestBody MEMBER member) {
+        try {
+            member.setMember(key);
+            int result = memberService.modify(member);
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_MEMBER_SUCCESS", true);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_MEMBER_FAIL", null);
+        }
+    }
+
     @RequestMapping(value="/{key}/profile", method= RequestMethod.PUT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseOverlays modifyProfile(@PathVariable("key") int key, @Validated @ModelAttribute MEMBER member) {
         try {
