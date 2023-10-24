@@ -79,4 +79,18 @@ public class ChatService extends BasicService{
     public Integer saveRoom(ROOM room) {
         return chatDao.insertChatRoom(room);
     }
+
+    public ROOM getRoomByNokey(ROOM room) {
+        ROOM result = chatDao.getRoomByNokey(room);
+        if(result == null){
+            chatDao.insertChatRoom(room);
+            return room;
+        } else {
+            return result;
+        }
+    }
+
+    public Integer modifyRoomActive(ROOM room) {
+        return chatDao.updateRoomActive(room);
+    }
 }

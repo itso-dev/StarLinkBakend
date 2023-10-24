@@ -116,9 +116,24 @@ public class ChatController {
     }
 
     @RequestMapping(value="/room/{key}", method= RequestMethod.GET)
-    public ResponseOverlays getRoom(@PathVariable("key") int key) {
+    public ResponseOverlays getRoomByKey(@PathVariable("key") int key) {
         try {
             ROOM result = chatService.getRoom(new ROOM(key));
+            if(result != null){
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CHAT_SUCCESS", result);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CHAT_NULL", null);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "GET_CHAT_FAIL", null);
+        }
+    }
+
+    @RequestMapping(value="/room/get", method= RequestMethod.POST)
+    public ResponseOverlays getRoomByNokey(@Validated @RequestBody ROOM room) {
+        try {
+            ROOM result = chatService.getRoomByNokey(room);
             if(result != null){
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "GET_CHAT_SUCCESS", result);
             } else {
@@ -138,6 +153,21 @@ public class ChatController {
                 return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CHAT_NOT_SAVE", false);
             } else {
                 return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_CHAT_SUCCESS", room);
+            }
+        } catch (Exception e){
+            logger.error(e.getLocalizedMessage());
+            return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CHAT_FAIL", false);
+        }
+    }
+
+    @RequestMapping(value="/room/{key}", method= RequestMethod.PUT)
+    public ResponseOverlays modifyRoomActive(@PathVariable("key") int key) {
+        try {
+            int result = chatService.modifyRoomActive(new ROOM(key));
+            if(result == 0){
+                return new ResponseOverlays(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "SAVE_CHAT_NOT_SAVE", false);
+            } else {
+                return new ResponseOverlays(HttpServletResponse.SC_OK, "SAVE_CHAT_SUCCESS", true);
             }
         } catch (Exception e){
             logger.error(e.getLocalizedMessage());

@@ -21,4 +21,8 @@ public interface ChatDao {
     ROOM getChatRoom(ROOM room);
     CHAT getChatLast(CHAT param);
     Integer insertChatRoom(ROOM room);
+
+    ROOM getRoomByNokey(ROOM room);
+
+    Integer updateRoomActive(ROOM room);
 }

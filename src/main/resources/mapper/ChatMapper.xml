@@ -70,6 +70,7 @@
     <select id="getListChatRoom" resultType="com.jamie.home.api.model.ROOM">
         SELECT * FROM ROOM
         WHERE 1=1
+            AND ACTIVE = TRUE
             AND (
                 MEMBER = #{member}
                 OR
@@ -78,7 +79,7 @@
     </select>
 
     <select id="getChatRoom" resultType="com.jamie.home.api.model.ROOM">
-        SELECT * FROM ROOM WHERE ROOM = #{room}
+        SELECT * FROM ROOM WHERE ACTIVE = TRUE AND ROOM = #{room}
     </select>
 
     <select id="getChatLast" resultType="com.jamie.home.api.model.CHAT">
@@ -88,4 +89,12 @@
     <insert id="insertChatRoom" parameterType="com.jamie.home.api.model.ROOM" useGeneratedKeys="true" keyProperty="room">
         INSERT INTO ROOM (MEMBER, INTERPRETER) VALUES (#{member}, #{interpreter})
     </insert>
+
+    <select id="getRoomByNokey" resultType="com.jamie.home.api.model.ROOM">
+        SELECT * FROM ROOM WHERE ACTIVE = TRUE AND MEMBER = #{member} AND INTERPRETER = #{interpreter}
+    </select>
+
+    <update id="updateRoomActive">
+        UPDATE ROOM SET UPD_DATE = now(), ACTIVE = FALSE WHERE ROOM = #{room}
+    </update>
 </mapper>
