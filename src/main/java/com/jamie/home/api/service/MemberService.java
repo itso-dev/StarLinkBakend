@@ -43,7 +43,9 @@ public class MemberService extends BasicService{
 
     public MEMBER getMemberByCol(MEMBER member){
         MEMBER result = memberDao.getMemberByCol(member);
-        setDetailInfo(result);
+        if(member.getMember() != null){
+            setDetailInfo(result);
+        }
         return result;
     }
 
