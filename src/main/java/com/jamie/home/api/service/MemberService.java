@@ -34,8 +34,13 @@ public class MemberService extends BasicService{
 
     private void setDetailInfo(MEMBER member) {
         INTERPRETER interpreter = interDao.getInterpreterByMemberKey(member);
-        if(interpreter != null && interpreter.getStop_date() != null){
-            interDao.updateInterpreterStopState(interpreter);
+        if(interpreter != null){
+            interpreter.getOther_info().put("location",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"location"));
+            interpreter.getOther_info().put("category",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"category"));
+            interpreter.getOther_info().put("language",interDao.getListInterpreterMultiChoice(interpreter.getInterpreter(),"language"));
+            if(interpreter.getStop_date() != null){
+                interDao.updateInterpreterStopState(interpreter);
+            }
         }
         member.getOther_info().put("interpreter_info", interpreter);
 

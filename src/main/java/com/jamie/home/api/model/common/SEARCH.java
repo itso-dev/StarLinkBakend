@@ -41,6 +41,7 @@ public class SEARCH {
     private Integer car;
     private Integer pickup;
     private Integer gender;
+    private Integer state;
     private Boolean recommend;
     private List<Integer> location_list;
 
