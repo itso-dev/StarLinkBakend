@@ -60,9 +60,9 @@
 
     <insert id="insertMember" parameterType="com.jamie.home.api.model.common.MEMBER" useGeneratedKeys="true" keyProperty="member">
         INSERT INTO MEMBER (
-            ID, COUNTRY, EMAIL, PASSWORD, ROLE, NAME, PHONE, GENDER, ADDRESS, ADDRESS_DETAIL, MARKETING_YN
+            ID, COUNTRY, EMAIL, PASSWORD, ROLE, NAME, PHONE, GENDER, ADDRESS, ADDRESS_DETAIL, MARKETING_YN, PROFILE_FILE
         ) VALUES (
-            #{id}, #{country}, #{email}, #{password}, #{role}, #{name}, #{phone}, #{gender}, #{address}, #{address_detail}, #{marketing_yn}
+            #{id}, #{country}, #{email}, #{password}, #{role}, #{name}, #{phone}, #{gender}, #{address}, #{address_detail}, #{marketing_yn}, #{profile_file}
         )
     </insert>
 
