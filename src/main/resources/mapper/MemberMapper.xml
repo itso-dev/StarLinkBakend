@@ -3,6 +3,7 @@
 
 <mapper namespace="com.jamie.home.api.dao.MemberDao">
     <sql id="list">
+        AND ROLE != 'ROLE_ADMIN'
         <if test="search_keyword != null">
             <if test="search_type == 'name'.toString()">
             </if>
