@@ -11,6 +11,8 @@ import com.jamie.home.util.FileUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -123,7 +125,11 @@ public class BookingService extends BasicService{
 
     public Integer modifyReportStop(REPORT report, INTERPRETER interpreter) {
         Integer result = bookingDao.updateBookingReport(report);
+        INTERPRETER ori_interpreter = interDao.getInterpreter(interpreter);
         interpreter.setState((Integer) report.getOther_info().get("state"));
+        interpreter.setStop_date(new SimpleDateFormat("yyyyMMdd").format(new Date()));
+        // 알림 TYPE interpreter_reject : 통역사 정지
+        memberDao.insertMemberInfo(new INFO(ori_interpreter.getMember(), ori_interpreter.getMember(), "interpreter_stop", "통역사 자격이 정지되었습니다.","7일간 통역사 활동을 할 수 없습니다."));
         interDao.updateInterpreter(interpreter);
         return result;
     }
