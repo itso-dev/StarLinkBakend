@@ -41,6 +41,12 @@ public class BookingService extends BasicService{
 
     public Integer save(BOOKING booking) {
         Integer result = bookingDao.insertBooking(booking);
+
+        INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(booking.getInterpreter()));
+        MEMBER member = memberDao.getMember(new MEMBER(booking.getMember()));
+        // 알림 TYPE booking_booking : 예약 완료
+        memberDao.insertMemberInfo(new INFO(interpreter.getMember(), booking.getBooking(), "booking_booking", "새로운 예약이 신청되었습니다.",member.getName()+"님이 예약 신청하였습니다."));
+
         return result;
     }
 
@@ -59,11 +65,6 @@ public class BookingService extends BasicService{
             MEMBER member = memberDao.getMember(new MEMBER(ori_booking.getMember()));
             // 알림 TYPE booking_cancel : 예약 취소
             memberDao.insertMemberInfo(new INFO(interpreter.getMember(), booking.getBooking(), "booking_cancel", "예약이 취소되었습니다.",member.getName()+"님의 예약이 취소되었습니다."));
-        } else if(booking.getState() == bookingField.getField()){
-            INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(ori_booking.getInterpreter()));
-            MEMBER member = memberDao.getMember(new MEMBER(ori_booking.getMember()));
-            // 알림 TYPE booking_booking : 예약 완료
-            memberDao.insertMemberInfo(new INFO(interpreter.getMember(), booking.getBooking(), "booking_booking", "새로운 예약이 신청되었습니다.",member.getName()+"님이 예약 신청하였습니다."));
         }
         return bookingDao.updateBooking(booking);
     }
