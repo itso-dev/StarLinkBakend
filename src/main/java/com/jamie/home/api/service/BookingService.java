@@ -45,7 +45,7 @@ public class BookingService extends BasicService{
         INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(booking.getInterpreter()));
         MEMBER member = memberDao.getMember(new MEMBER(booking.getMember()));
         // 알림 TYPE booking_booking : 예약 완료
-        memberDao.insertMemberInfo(new INFO(interpreter.getMember(), booking.getBooking(), "booking_booking", "새로운 예약이 신청되었습니다.",member.getName()+"님이 예약 신청하였습니다."));
+        memberDao.insertMemberInfo(new INFO(interpreter.getMember(), booking.getBooking(), "booking_booking", "새로운 예약이 신청되었습니다.",member.getName()+"님이 예약 신청하였습니다.", null));
 
         return result;
     }
@@ -64,7 +64,7 @@ public class BookingService extends BasicService{
             INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(ori_booking.getInterpreter()));
             MEMBER member = memberDao.getMember(new MEMBER(ori_booking.getMember()));
             // 알림 TYPE booking_cancel : 예약 취소
-            memberDao.insertMemberInfo(new INFO(interpreter.getMember(), booking.getBooking(), "booking_cancel", "예약이 취소되었습니다.",member.getName()+"님의 예약이 취소되었습니다."));
+            memberDao.insertMemberInfo(new INFO(interpreter.getMember(), booking.getBooking(), "booking_cancel", "예약이 취소되었습니다.",member.getName()+"님의 예약이 취소되었습니다.", null));
         }
         return bookingDao.updateBooking(booking);
     }
@@ -130,7 +130,7 @@ public class BookingService extends BasicService{
         interpreter.setState((Integer) report.getOther_info().get("state"));
         interpreter.setStop_date(new SimpleDateFormat("yyyyMMdd").format(new Date()));
         // 알림 TYPE interpreter_reject : 통역사 정지
-        memberDao.insertMemberInfo(new INFO(ori_interpreter.getMember(), ori_interpreter.getMember(), "interpreter_stop", "통역사 자격이 정지되었습니다.","7일간 통역사 활동을 할 수 없습니다."));
+        memberDao.insertMemberInfo(new INFO(ori_interpreter.getMember(), ori_interpreter.getMember(), "interpreter_stop", "통역사 자격이 정지되었습니다.","7일간 통역사 활동을 할 수 없습니다.", null));
         interDao.updateInterpreter(interpreter);
         return result;
     }

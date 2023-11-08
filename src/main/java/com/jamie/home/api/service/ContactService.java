@@ -62,7 +62,7 @@ public class ContactService extends BasicService{
         }
         if(ori_contact.getAnswer() == null && contact.getAnswer() != null){
             // 알림 TYPE contact_answer : 관리자 문의 답변
-            memberDao.insertMemberInfo(new INFO(ori_contact.getMember(), ori_contact.getContact(), "contact_answer", "새로운 문의 답변이 도착했습니다.",""));
+            memberDao.insertMemberInfo(new INFO(ori_contact.getMember(), ori_contact.getContact(), "contact_answer", "새로운 문의 답변이 도착했습니다.","", null));
         }
         return contactDao.updateContact(contact);
     }

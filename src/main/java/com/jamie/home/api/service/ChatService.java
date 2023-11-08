@@ -28,7 +28,7 @@ public class ChatService extends BasicService{
     }
 
     public Integer save(CHAT chat) {
-        if(chat.getFiles_new() != null){
+        if (chat.getFiles_new() != null) {
             chat.setContent(
                     FileUtils.saveFiles(
                             chat.getFiles_new(),
@@ -40,12 +40,12 @@ public class ChatService extends BasicService{
         ROOM room = chatDao.getChatRoom(new ROOM(chat.getRoom()));
         INTERPRETER interpreter = interDao.getInterpreter(new INTERPRETER(room.getInterpreter()));
         if(room.getMember() != chat.getMember()){
-            // 알림 TYPE chat_new : 새로운 메세지
-            memberDao.insertMemberInfo(new INFO(room.getMember(), room.getRoom(), "chat_new", "새로운 메시지가 도착했습니다.",""));
+            // 알림 TYPE chat_new : 새로운 메세지 
+            memberDao.insertMemberInfo(new INFO(room.getMember(), room.getRoom(), "chat_new", "새로운 메시지가 도착했습니다.", chat.getContent(), chat.getMember()));
         }
         if(interpreter.getMember() != chat.getMember()){
             // 알림 TYPE chat_new : 새로운 메세지
-            memberDao.insertMemberInfo(new INFO(interpreter.getMember(), room.getRoom(), "chat_new", "새로운 메시지가 도착했습니다.",""));
+            memberDao.insertMemberInfo(new INFO(interpreter.getMember(), room.getRoom(), "chat_new", "새로운 메시지가 도착했습니다.", chat.getContent(), chat.getMember()));
         }
 
         return chatDao.insertChat(chat);
@@ -57,7 +57,7 @@ public class ChatService extends BasicService{
 
     public Integer remove(CHAT chat) {
         return chatDao.deleteChat(chat);
-    }
+    } 
 
     public List<ROOM> listRoom(SEARCH search) {
         List<ROOM> result = chatDao.getListChatRoom(search);

@@ -152,13 +152,13 @@ public class InterService extends BasicService{
 
         if(interpreter.getState() == confirmField.getField()){
             // 알림 TYPE interpreter_confirm : 통역사 승인
-            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_confirm", "통역사 신청이 승인되었습니다.",""));
+            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_confirm", "통역사 신청이 승인되었습니다.","", null));
         } else if(interpreter.getState() == rejectField.getField()){
             // 알림 TYPE interpreter_reject : 통역사 거절
-            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_reject", "통역사 신청이 반려되었습니다.",interpreter.getReject_msg()));
+            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_reject", "통역사 신청이 반려되었습니다.",interpreter.getReject_msg(), null));
         } else if(interpreter.getState() == stopField.getField()){
             // 알림 TYPE interpreter_reject : 통역사 정지
-            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_stop", "통역사 자격이 정지되었습니다.","7일간 통역사 활동을 할 수 없습니다."));
+            memberDao.insertMemberInfo(new INFO(ori_Interpreter.getMember(), ori_Interpreter.getMember(), "interpreter_stop", "통역사 자격이 정지되었습니다.","7일간 통역사 활동을 할 수 없습니다.", null));
             interpreter.setStop_date(new SimpleDateFormat("yyyyMMdd").format(new Date()));
         }
 

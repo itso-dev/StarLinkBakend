@@ -18,14 +18,16 @@ public class INFO {
     private Integer type;
     private String reg_date;
     private String upd_date;
+    private Integer key2;
 
     public INFO() {}
 
-    public INFO(Integer member, Integer key, String info_type, String title, String content) {
+    public INFO(Integer member, Integer key, String info_type, String title, String content, Integer key2) {
         this.member = member;
         this.key = key;
         this.info_type = info_type;
         this.title = title;
         this.content = content;
+        this.key2 = key2;
     }
 }

@@ -84,9 +84,9 @@
 
     <insert id="insertMemberInfo">
         INSERT INTO MEMBER_INFO (
-            MEMBER, `KEY`, INFO_TYPE, TITLE, CONTENT
+            MEMBER, `KEY`, INFO_TYPE, TITLE, CONTENT, `KEY2`
         ) VALUES (
-            #{member}, #{key}, #{info_type}, #{title}, #{content}
+            #{member}, #{key}, #{info_type}, #{title}, #{content}, #{key2}
         )
     </insert>
 
